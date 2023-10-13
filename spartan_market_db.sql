@@ -16,12 +16,14 @@ CREATE TABLE Users(
 
 CREATE TABLE Service(
 	service_id INT PRIMARY KEY,
+    service_provider INT NOT NULL,
     service_name VARCHAR(50) NOT NULL,
     service_type VARCHAR(20) NOT NULL,
     service_price FLOAT NOT NULL,
     service_description VARCHAR(1000),
     post_datetime TIMESTAMP NOT NULL,
-    course_tag VARCHAR(20)
+    course_tag VARCHAR(20),
+    FOREIGN KEY (service_provider) REFERENCES Users(user_id)
  );
  
  CREATE TABLE Item(
