@@ -10,8 +10,8 @@ CREATE TABLE Users(
     l_name INT NOT NULL,
     email VARCHAR(200) UNIQUE NOT NULL,
     phone_num VARCHAR(20) NOT NULL,
-    rating FLOAT(2, 1),
-    is_admin BOOL
+    rating FLOAT,
+    is_admin BOOL NOT NULL
 );
 
 CREATE TABLE Service(
