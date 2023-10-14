@@ -5,7 +5,7 @@ USE spartan_market;
 CREATE TABLE Users(
 	user_id INT PRIMARY KEY,
     username VARCHAR(200) UNIQUE NOT NULL,
-    user_password VARCHAR(255) COLLATE utf8_unicode_ci NOT NULL,
+    user_password VARCHAR(1000) NOT NULL,
     f_name INT NOT NULL,
     l_name INT NOT NULL,
     email VARCHAR(200) UNIQUE NOT NULL,
