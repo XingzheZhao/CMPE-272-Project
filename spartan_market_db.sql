@@ -6,10 +6,10 @@ CREATE TABLE Users(
 	user_id INT PRIMARY KEY,
     username VARCHAR(200) UNIQUE NOT NULL,
     user_password VARCHAR(1000) NOT NULL,
-    f_name INT NOT NULL,
-    l_name INT NOT NULL,
+    f_name VARCHAR(50) NOT NULL,
+    l_name VARCHAR(50) NOT NULL,
     email VARCHAR(200) UNIQUE NOT NULL,
-    phone_num VARCHAR(20) NOT NULL,
+    phone_num VARCHAR(20),
     rating FLOAT,
     is_admin BOOL NOT NULL
 );
