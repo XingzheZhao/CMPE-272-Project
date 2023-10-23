@@ -31,10 +31,4 @@ db.connect(function(err) {
     })
 });
 
-var sql = "SELECT * FROM Users WHERE user_id = 0";
-db.query(sql, function (err, result, fields) {
-    if (err) throw err;
-    console.log(result[0]);
-});
-
 module.exports = db;
