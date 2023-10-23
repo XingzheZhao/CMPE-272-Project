@@ -3,7 +3,7 @@ CREATE DATABASE spartan_market;
 USE spartan_market;
 
 CREATE TABLE Users(
-	user_id INT PRIMARY KEY,
+	user_id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(200) UNIQUE NOT NULL,
     user_password VARCHAR(1000) NOT NULL,
     f_name VARCHAR(50) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE Users(
 );
 
 CREATE TABLE Service(
-	service_id INT PRIMARY KEY,
+	service_id INT PRIMARY KEY AUTO_INCREMENT,
     service_provider INT NOT NULL,
     service_name VARCHAR(50) NOT NULL,
     service_type VARCHAR(20) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE Service(
  );
  
  CREATE TABLE Item(
-	item_id INT PRIMARY KEY,
+	item_id INT PRIMARY KEY AUTO_INCREMENT,
     seller_id INT NOT NULL,
     item_name VARCHAR(50) NOT NULL,
     item_type VARCHAR(20) NOT NULL,
@@ -43,7 +43,7 @@ CREATE TABLE Service(
  );
  
  CREATE TABLE InterestQueue(
-	queue_id INT PRIMARY KEY,
+	queue_id INT PRIMARY KEY AUTO_INCREMENT,
     queue_position INT NOT NULL,
     buyer_id INT NOT NULL,
     item_id INT NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE Service(
  );
  
 CREATE TABLE Record(
-	record_id INT PRIMARY KEY,
+	record_id INT PRIMARY KEY AUTO_INCREMENT,
     buyer_id INT NOT NULL,
     seller_id INT NOT NULL,
     item_id INT,
@@ -65,7 +65,7 @@ CREATE TABLE Record(
 );
 
 CREATE TABLE Report(
-	report_id INT PRIMARY KEY,
+	report_id INT PRIMARY KEY AUTO_INCREMENT,
     initiator_id INT NOT NULL,
     record_id INT NOT NULL,
     report_reason VARCHAR(30) NOT NULL,
