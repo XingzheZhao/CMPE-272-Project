@@ -14,7 +14,7 @@ install all required packages
 
 start the backend
 
-    node src
+    npm start
 
 ### Frontend
 
