@@ -129,7 +129,7 @@ const sendMail = async (receiver) => {
     let details = {
         from: `Spartan Market <no-reply.${process.env.GMAIL}>`,
         replyTo: `spartan.market@no-reply.com`,
-        to: "peizu.li@sjsu.edu",
+        to: receiver,
         subject: "Spartan Market Sign Up Verification",
         text: text,
         html: `<p>${text}</p>`
