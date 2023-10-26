@@ -22,9 +22,9 @@ const ForgetPassword = () => {
         e.preventDefault();
         try{
             const url = "http://localhost:3001/accounts/forget-password";
-            const {data: res} = await axios.post(url, data);
-            navigate("/");
-            console.log("no error");
+            const {data: res, code: valiCode} = await axios.post(url, data);
+            console.log(res, valiCode);
+            navigate("/reset-password", );
             window.location.reload();
         }
         catch (e) {

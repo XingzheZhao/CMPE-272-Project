@@ -2,13 +2,14 @@ const router = require("express").Router();
 const Joi = require('joi');
 const passwordComplexity = require('joi-password-complexity');
 const bcrypt = require("bcrypt");
-const sgMail = require('@sendgrid/mail')
+const nodeMailer = require('nodemailer')
+require('dotenv').config()
 
 router.post("/forget-password", async(req, res) => {
     try{
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY)
         const db = require("../index").db;
         const {email, username} = req.body;
+
         db.query("SELECT * FROM Users WHERE username = ? AND email = ?", [username, email], (err, result) => {
             if (err) {
                 console.error("Query Error: ", err);
@@ -17,25 +18,15 @@ router.post("/forget-password", async(req, res) => {
             else if (result.length === 0) {
                 res.status(401).json({ message: "Username/Email does not exist" });
             } 
-            else { 
-                const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
-                const text = "Your verification code is: " + verificationCode;
-                const msg = {
-                    to: 'peizuli1@gmail.com',
-                    from: 'peizu.li@sjsu.edu',
-                    subject: 'Spartan Market Verification',
-                    text: text,
+            else {
+                const result = sendMail(email);
+
+                if(result === false){
+                    res.status(410).json({ message: "Email cannot send" });
                 }
-                sgMail
-                    .send(msg)
-                    .then((response) => {
-                        console.log(response[0])
-                    })
-                    .catch((error) => {
-                        console.error(error)
-                        res.status(410).json({ message: "Email cannot send" });
-                    })
-                res.status(201).json({ message: "Found a valid user", data: username, code: verificationCode });
+                else {
+                    res.status(202).json({message: "Email sent", data: username, code: result});
+                }
             }
         });
     }
@@ -45,8 +36,37 @@ router.post("/forget-password", async(req, res) => {
     }
 });
 
+router.post("/send-email", async (req, res) => {
+    const email = req.body.email
+    const result = sendMail(email);
+
+    if(result === false){
+        res.status(500).json("Internal Server Error")
+    }
+    else {
+        res.status(202).json({message: "Email sent", code: result});
+    }
+
+})
+
+router.post("/auth", async (req, res) => {
+    try {
+        const {code , hashed_code} = req.body
+        
+        const valid = await bcrypt.compare(code, hashed_code);
+        if (!valid)
+            return res.status(401).json({message: "Invalid code"})
+        else 
+            return res.status(200).json({message: "valid code"})
+    }
+    catch(err) {
+        res.status(500).json({message: "Internal Server Error"})
+    }
+});
+
 router.post("/reset-password", async(req, res) => {
     try{
+        const db = require("../index").db;
         const {password, confirmed_password, username} = req.body
 
         db.query("SELECT * FROM Users WHERE username = ?", [username], (err, result) => {
@@ -91,6 +111,45 @@ const validatePassword = (data) => {
 		password: passwordComplexity().required().label("Password")
 	})
 	return schema.validate(data)
+}
+
+const sendMail = async (receiver) => {
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    const text = "Your verification code is: " + verificationCode;
+
+    let mailTransporter = nodeMailer.createTransport({
+        service: "gmail",
+        host: "smtp.gmail.com",
+        secure: true,
+        auth:{
+            user: process.env.GMAIL,
+            pass: process.env.GMAIL_PASSWORD
+        }
+    });
+
+    let details = {
+        from: `Spartan Market <no-reply.${process.env.GMAIL}>`,
+        replyTo: `spartan.market@no-reply.com`,
+        to: receiver,
+        subject: "Spartan Market Sign Up Verification",
+        text: text,
+        html: `<p>${text}</p>`
+    }
+
+    try {
+        await mailTransporter.sendMail(details);
+        console.log("Email sent")
+
+        const salt = await bcrypt.genSalt(Number(10))
+        const hashed = await bcrypt.hash(verificationCode, salt) 
+
+        return hashed;
+    }
+    catch(err){
+        console.log("send mail error")
+        console.log(err);
+        return false;
+    }
 }
 
 module.exports = router;
