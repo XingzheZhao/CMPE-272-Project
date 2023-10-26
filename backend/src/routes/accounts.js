@@ -18,17 +18,16 @@ router.post("/forget-password", async(req, res) => {
             else if (result.length === 0) {
                 res.status(401).json({ message: "Username/Email does not exist" });
             } 
-            else {
-                const result = sendMail(email);
-
-                if(result === false){
-                    res.status(410).json({ message: "Email cannot send" });
-                }
-                else {
-                    res.status(202).json({message: "Email sent", data: username, code: result});
-                }
-            }
         });
+
+        const result = await sendMail(email);
+
+        if(result === false){
+            res.status(410).json({ message: "Email cannot send" });
+        }
+        else {
+            res.status(202).json({message: "Email sent", data: email, code: result});
+        }
     }
     catch (err) {
         console.log(err);
@@ -38,7 +37,7 @@ router.post("/forget-password", async(req, res) => {
 
 router.post("/send-email", async (req, res) => {
     const email = req.body.email
-    const result = sendMail(email);
+    const result = await sendMail(email);
 
     if(result === false){
         res.status(500).json("Internal Server Error")
@@ -51,7 +50,7 @@ router.post("/send-email", async (req, res) => {
 
 router.post("/auth", async (req, res) => {
     try {
-        const {code , hashed_code} = req.body
+        const {code, hashed_code} = req.body
         
         const valid = await bcrypt.compare(code, hashed_code);
         if (!valid)
@@ -67,9 +66,9 @@ router.post("/auth", async (req, res) => {
 router.post("/reset-password", async(req, res) => {
     try{
         const db = require("../index").db;
-        const {password, confirmed_password, username} = req.body
+        const {password, confirmed_password, email} = req.body
 
-        db.query("SELECT * FROM Users WHERE username = ?", [username], (err, result) => {
+        db.query("SELECT * FROM Users WHERE email = ?", [email], (err, result) => {
             if (err) {
                 console.error("Query Error: ", err);
                 return res.status(500).json({message: "Internal Server Error"});
@@ -130,7 +129,7 @@ const sendMail = async (receiver) => {
     let details = {
         from: `Spartan Market <no-reply.${process.env.GMAIL}>`,
         replyTo: `spartan.market@no-reply.com`,
-        to: receiver,
+        to: "peizu.li@sjsu.edu",
         subject: "Spartan Market Sign Up Verification",
         text: text,
         html: `<p>${text}</p>`
