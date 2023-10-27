@@ -28,7 +28,7 @@ const Auth = () => {
         try{
             const url = "http://localhost:3001/accounts/auth"
             await axios.post(url, {code: data.code, hashed_code: hashed_code});
-            navigate('/reset-password', {state: location.state.user})
+            navigate('/reset-password', {state: {email: location.state.user}})
         }
         catch (err){
             if(err.response &&
@@ -81,8 +81,8 @@ const Auth = () => {
                         </div>
                         {err && <div className="err_msg">{err}</div>}
                         <div className="resend">
-                            <p className="text">Did not see the email? </p>
-                            <p className="text link" onClick={handleResend}>Resend Email</p>
+                            <p className="text_email">Did not see the email? </p>
+                            <p className="text_email link" onClick={handleResend}>Resend Email</p>
                         </div>
                         {resent && <div className="resent_msg">{resent}</div>}
                         <Button type='submit' variant="contained" color="primary" fullWidth>Verify</Button>

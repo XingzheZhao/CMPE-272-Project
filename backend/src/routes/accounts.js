@@ -80,7 +80,7 @@ router.post("/reset-password", async(req, res) => {
         if(password.localeCompare(confirmed_password))
             return res.status(402).json({message: "Password does not match!"})
 
-        const {error} = validatePassword(password)
+        const {error} = validatePassword({password: password})
         if (error){
             const messages = []
             error.details.forEach((detail) => {
@@ -92,7 +92,7 @@ router.post("/reset-password", async(req, res) => {
         const salt = await bcrypt.genSalt(Number(12))
         const hashed = await bcrypt.hash(password, salt)
 
-        db.query("UPDATE Users SET user_password = ? WHERE username = ?", [hashed, username], (err, result) => {
+        db.query("UPDATE Users SET user_password = ? WHERE email = ?", [hashed, email], (err, result) => {
             if (err) {
                 console.error("Query Error: ", err);
                 return res.status(500).json({message: "Internal Server Error"});
@@ -101,7 +101,8 @@ router.post("/reset-password", async(req, res) => {
         res.status(201).json({message: "User password updated"})
     }
     catch(err){
-        res.status.json({message: "Internal Server Error"})
+        console.log(err)
+        res.status(500).json({message: "Internal Server Error"})
     }
 });
 
