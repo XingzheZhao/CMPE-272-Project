@@ -2,11 +2,19 @@
 
 ## Developer Note
 
+Contact peizu.li@sjsu.edu for the .env file.
+
 ### Backend
+
+get the .env file
 
 go to the backend directory
 
     cd backend
+
+store the .env file under this directory
+
+    mv <your_.env_file_path> .
 
 install all required packages
 
