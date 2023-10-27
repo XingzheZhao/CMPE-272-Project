@@ -1,19 +1,31 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
+require('dotenv').config()
+
+const accounts = require('./routes/accounts')
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use("/accounts", accounts)
 
 const db = mysql.createConnection({
-    host: 'cmpe-database.cid1zhaawgw2.us-east-2.rds.amazonaws.com',
+    host: process.env.DATABASE_HOST,
     port: 3306,
-    user: 'admin',
-    password: 'password',
-    database: 'cmpe_272_db'
+    user: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE
 })
+
+db.connect(function(err) {
+    if (err) throw err;
+    app.get('/', (req, res) => {
+        res.send("Connected to Database.");
+    })
+    console.log("Connected to Database");
+});
 
 const PORT = 3001;
 
@@ -24,17 +36,4 @@ app.listen(PORT, (err) => {
         console.log("Server Connected, and running in PORT: " + PORT)
 })
 
-db.connect(function(err) {
-    if (err) throw err;
-    app.get('/', (req, res) => {
-        res.send("Connected to Database.")
-    })
-});
-
-var sql = "SELECT * FROM Users WHERE user_id = 0";
-db.query(sql, function (err, result, fields) {
-    if (err) throw err;
-    console.log(result[0]);
-});
-
-module.exports = db;
+module.exports = { app, db };

@@ -1,0 +1,46 @@
+.auth_container{
+    border: 1px solid #000;
+    max-width: 50%;
+    padding-top: 1.5em;
+    padding-bottom: 1.5em;
+    padding-right: 2.5em;
+    padding-left: 2.5em;
+    border-radius: 5%;
+    margin: auto;
+    margin-top: 4em;
+    background-color: antiquewhite;
+}
+
+.auth_field {
+    margin-bottom: 1.5em
+}
+
+.err_msg {
+    margin-bottom: 1.5em;
+    color: red;
+    text-align: center;
+    font-size: 14px;
+}
+
+.resend{
+    margin-bottom: 1em;
+}
+
+.text_email {
+    text-align: center;
+    display: inline;
+}
+
+.link {
+    cursor: pointer;
+    color: blue;
+}
+
+.resent_msg {
+    font-size: 14px;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+    color: green;
+    text-align: center;
+    font-size: 14px;
+}
