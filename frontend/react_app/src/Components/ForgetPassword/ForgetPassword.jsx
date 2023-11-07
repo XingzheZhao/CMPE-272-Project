@@ -45,7 +45,7 @@ const ForgetPassword = () => {
 
     if (isLoading) {
         return (
-            <div className="loading-spinner">Sending Email</div>
+            <div className="loading-spinner">Loading</div>
         );
     }
     else{

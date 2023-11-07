@@ -6,11 +6,13 @@ import Auth from './Components/Auth/Auth';
 import ForgetPassword from './Components/ForgetPassword/ForgetPassword';
 import Homepage from './Components/Homepage/Homepage';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
+import Navbar from './Components/Navbar/Navbar';
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
+      <Navbar/>
         <div className='content'>
           <Routes>
             <Route path="/" exact element={<Homepage />}/>
