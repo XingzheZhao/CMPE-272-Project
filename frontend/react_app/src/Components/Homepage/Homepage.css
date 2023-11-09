@@ -1,5 +1,12 @@
-.title{
+.items {
     display: flex;
     justify-content: center;
-    align-items: center;
+    list-style: none;
+    margin: auto;
+    position: sticky;
+}
+
+.image {
+    height: 100px;
+    width: 100px;
 }

@@ -16,6 +16,7 @@ function App() {
         <div className='content'>
           <Routes>
             <Route path="/" exact element={<Homepage />}/>
+            <Route path='/items' exact element={<Homepage />}/>
             <Route path="/auth/:id" exact element={<Auth />}/>
             <Route path="/forget-password" exact element={< ForgetPassword/>}/>
             <Route path="/reset-password" exact element={<ResetPassword/>}/>
