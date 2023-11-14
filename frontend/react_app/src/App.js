@@ -17,7 +17,7 @@ function App() {
 
   switch (window.location.pathname) {
     case "/":
-      comp = <Login />
+      currForm === "login" ? comp = <Login onFormSwitch={toggleForm}/> : comp = <Register onFormSwitch={toggleForm}/>
       break
     case "/login":
       currForm === "login" ? comp = <Login onFormSwitch={toggleForm}/> : comp = <Register onFormSwitch={toggleForm}/>
