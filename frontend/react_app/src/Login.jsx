@@ -1,34 +1,26 @@
-import React, { useState } from "react";
-import {useNavigate} from 'react-router-dom';
+import React, { useState } from 'react'
 
-import Homepage from './Components/Homepage/Homepage.jsx'
-
-export const Login = (props) => {
-    const [email] = useState('');
-    const [pass] = useState('');
-
-    const navigate = useNavigate();
-
-    const navigateHome = () => {
-        navigate(Homepage);
-      };
+const Login = (props) => {
+    
+    let email, password;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(email);
-        console.log(pass);
     }
 
-    return (
+    return(
         <div className="login-form-container">
             <form className="login-form" onSubmit={handleSubmit}>
+                <h3>Log In</h3>
                 <label htmlFor="email">Email</label>
-                <input type="email" placeholder="youremail@gmail.com" id="email" name="email"/>
+                <input value={email} type="email" placeholder="myemail@abc.com" id="email" name="email"/>
                 <label htmlFor="password">Password</label>
-                <input type="password" placeholder="********" id="password" name="password"/>
-                <button type="submit" onClick={navigateHome}>Log In</button>
+                <input value={password} type="password" placeholder="*********" id="password" name="password"/>        
+                <button type='submit'>Log In</button>
             </form>
-            <button className= "link-button" onClick={() => props.onFormSwitch('register')}>Don't have an account? Register here</button>
+            <button className="form-swap-button" onClick={() => props.onFormSwitch('register')}>Don't have an account? Register here!</button>
         </div>
     )
 }
+
+export default Login
