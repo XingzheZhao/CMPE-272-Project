@@ -13,17 +13,28 @@ function App() {
     setCurrForm(formName);
   }
 
+  let comp 
+
+  switch (window.location.pathname) {
+    case "/":
+      comp = <Login />
+      break
+    case "/login":
+      currForm === "login" ? comp = <Login onFormSwitch={toggleForm}/> : comp = <Register onFormSwitch={toggleForm}/>
+      break
+    case "/homepage":
+      comp = <Homepage />
+      break
+    default:
+      break
+  }
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" exact element={<Homepage />}/>
-      </Routes>
       <div className="App">
         {
-          currForm === "login" ? <Login onFormSwitch={toggleForm}/> : <Register onFormSwitch={toggleForm}/>
+          comp
         }
       </div>
-    </BrowserRouter>
   );
 }
 

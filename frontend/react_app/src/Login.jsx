@@ -6,6 +6,7 @@ const Login = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        window.location.pathname = './homepage'
     }
 
     return(
