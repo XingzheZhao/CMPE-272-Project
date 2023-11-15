@@ -8,6 +8,8 @@ import Homepage from './Components/Homepage/Homepage';
 import ResetPassword from './Components/ResetPassword/ResetPassword';
 import Navbar from './Components/Navbar/Navbar';
 import Error from './Components/Error/Error';
+import SearchItem from './Components/SearchItem/SearchItem';
+import Item from './Components/Item/Item';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
             <Route path="/auth/:id" exact element={<Auth />}/>
             <Route path="/forget-password" exact element={< ForgetPassword/>}/>
             <Route path="/reset-password" exact element={<ResetPassword/>}/>
+            <Route path="/item/:id" exact element={<Item/>}/>
+            <Route path="/items/:text" exact element={<SearchItem/>}/>
             <Route path="*" element={<Error/>}/>
           </Routes>
         </div>

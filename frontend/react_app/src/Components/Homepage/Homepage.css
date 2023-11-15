@@ -26,7 +26,22 @@
 }
 
 hr {
+    width: 95%;
+    height: 5px;
+    border: solid;
+    color: #0055a2;
+    background-color: #0055a2;
+    border-radius: 30px;
+}
+
+.search_container{
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.search {
     width: 80%;
+    margin-left: 10%;
 }
 
 .items {

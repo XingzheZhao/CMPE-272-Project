@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { IconButton, InputAdornment, TextField } from "@mui/material"
 import { Search } from '@mui/icons-material'
 import axios from 'axios';
 import noImage from '../../image/noImage.png'
 
-import "./Homepage.css"
+import "../Homepage/Homepage.css"
 
-const Homepage = () => {
+const SearchItem = () => {
+    const { text } = useParams();
     const navigate = useNavigate();
 
     const [viewItems, setViewItems] = useState("on sale");
@@ -33,13 +34,14 @@ const Homepage = () => {
     }
 
     const handleViewItem = (itemId) => {
-        navigate(`/item/${itemId}`)
+        navigate(`/item/${itemId}`);
     }
 
     useEffect(() => {
+        const searchText = text.replace("search=","");
         const fetchOnSaleItems = async () => {
             try{
-                const result = await axios.get("http://localhost:3001/items/on-sale-items");
+                const result = await axios.get("http://localhost:3001/items/search-on-sale", {params: {search: searchText}});
                 setOnSaleItems(result.data);
             }
             catch(err){
@@ -48,7 +50,7 @@ const Homepage = () => {
         };
         const fetchInProgressItems = async () => {
             try{
-                const result = await axios.get("http://localhost:3001/items/in-progress-items", {params: {buyer: 1}})
+                const result = await axios.get("http://localhost:3001/items/search-in-progress", {params: {search: searchText, buyer: 1}})
                 setInProgressItems(result.data)
             }
             catch(err) {
@@ -57,7 +59,7 @@ const Homepage = () => {
         }
         fetchInProgressItems();
         fetchOnSaleItems();
-    },[]);
+    }, [text])
 
     return (
         <div className='item_page_container'>
@@ -133,6 +135,6 @@ const Homepage = () => {
             </React.Fragment>}
         </div>
     );
-};
+}
 
-export default Homepage;
+export default SearchItem;
