@@ -1,5 +1,9 @@
 const router = require('express').Router();
+const multer = require('multer');
 require('dotenv').config();
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 router.get("/on-sale-items", async (req, res) => {
     try{
@@ -113,7 +117,50 @@ router.get("/item", async (req, res) => {
 })
 
 router.delete("/item", async (req, res) => {
+    try{
+        const db = require('../index').db;
+        const id = req.query.id;
 
+        const sql = `DELETE FROM Item WHERE item_id = ${id}`
+
+        db.query(sql, (error, result) => {
+            if(error){
+                console.log(error);
+                res.status(400).json("Failed to delete item");
+            }
+            else{
+                res.status(200).json(result)
+            }
+        })
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json("Internal Server Error")
+    }
+})
+
+router.post("/item/edit", upload.single('item_image'), async (req, res) => {
+    try{
+        const db = require('../index').db;
+        const { id, item_name, item_description, is_exchange, item_price, exchange_demand } = req.body;
+        const item_image = req.file.buffer;
+            
+        const sql = "UPDATE Item SET item_name = ?, item_description = ?, item_image = ?, is_exchange = ?, item_price = ?, exchange_demand = ? WHERE item_id = ?";
+        db.query(sql, [item_name, item_description, item_image, is_exchange, item_price, exchange_demand, id], (err, result) => {
+            if(err){
+                console.log(err);
+                res.status(401).json({message: "Update Item Error"})
+            }
+            else{
+                console.log(result)
+                res.status(200).json(result)
+            }
+        })
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json("Internal Server Error")
+    }
 })
 
 module.exports = router;

@@ -59,6 +59,10 @@ const Homepage = () => {
         fetchOnSaleItems();
     },[]);
 
+    const getBase64 = (buffer) => {
+        return btoa(new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+    };
+
     return (
         <div className='item_page_container'>
             <div className='item_status_container'>
@@ -102,7 +106,9 @@ const Homepage = () => {
                     {
                         onSaleItems.map((item, index) => (
                             <div className='item_container' key={item.item_id}>
-                                {item.item_image ? <img className='image' src={item.item_image} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/> : <img className='image' src={noImage} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/>}
+                                {item.item_image ? 
+                                <img className='image' src={`data:image/*;base64,${getBase64(item.item_image.data)}`} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/> 
+                                : <img className='image' src={noImage} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/>}
                                 <ul className='item_info'>
                                     <li className='info item_name' onClick={() => handleViewItem(item.item_id)}>{item.item_name}</li>
                                     <li className='info item_price'>{item.is_exchange ? "Exchange" : <React.Fragment>${item.item_price}</React.Fragment>}</li>
@@ -120,7 +126,8 @@ const Homepage = () => {
                     {
                         inProgressItems.map((item, index) => (
                             <div className='item_container' key={item.item_id}>
-                                    {item.item_image ? <img className='image' src={item.item_image} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/> : <img className='image' src={noImage} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/>}
+                                    {item.item_image ? <img className='image' src={`data:image/*;base64,${getBase64(item.item_image.data)}`} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/> 
+                                    : <img className='image' src={noImage} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/>}
                                     <ul className='item_info'>
                                         <li className='info item_name' onClick={() => handleViewItem(item.item_id)}>{item.item_name}</li>
                                         <li className='info item_price'>{item.is_exchange ? "Exchange" : <React.Fragment>${item.item_price}</React.Fragment>}</li>
