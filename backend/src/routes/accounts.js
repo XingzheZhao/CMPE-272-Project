@@ -8,9 +8,9 @@ require('dotenv').config()
 router.post("/login", async(req, res)=> {
     const db = require("../index").db;
     const username = req.body.username;
-    const password = req.body.user_password;
+    const password = req.body.password;
 
-    db.query("SELECT * FROM Users WHERE username = ? AND user_password = ?", [username, password], (err, result) => {
+    db.query("SELECT username, user_password, is_admin FROM Users WHERE username = ?", [username], async (err, result) => {
         if (err) {
             console.error("Query Error: ", err);
             res.status(500).json({ message: "Internal Server Error" });
@@ -19,19 +19,19 @@ router.post("/login", async(req, res)=> {
             res.status(401).json({ message: "User does not exist" });
         } 
         else{
-            const hashedPassword = result[0].password
-            if (bcrypt.compare(password, hashedPassword)) {
+            const hashedPassword = result[0].user_password
+            const samePassword = await bcrypt.compare(password, hashedPassword);
+            if (samePassword) {
                 console.log("Login Successful")
-                res.send(`${user} is logged in!`)
+                res.status(200).json(result)
             } 
             else {
                 console.log("Password Incorrect")
-                res.send("Password incorrect!")
+                res.status(401).json({message: "Password Incorrect"})
             } 
         }
     });
-    
-}); 
+});
 
 
 router.post("/forget-password", async(req, res) => {
