@@ -5,6 +5,35 @@ const bcrypt = require("bcrypt");
 const nodeMailer = require('nodemailer')
 require('dotenv').config()
 
+router.post("/login", async(req, res)=> {
+    const db = require("../index").db;
+    const username = req.body.username;
+    const password = req.body.user_password;
+
+    db.query("SELECT * FROM Users WHERE username = ? AND user_password = ?", [username, password], (err, result) => {
+        if (err) {
+            console.error("Query Error: ", err);
+            res.status(500).json({ message: "Internal Server Error" });
+        } 
+        else if (result.length === 0) {
+            res.status(401).json({ message: "User does not exist" });
+        } 
+        else{
+            const hashedPassword = result[0].password
+            if (bcrypt.compare(password, hashedPassword)) {
+                console.log("Login Successful")
+                res.send(`${user} is logged in!`)
+            } 
+            else {
+                console.log("Password Incorrect")
+                res.send("Password incorrect!")
+            } 
+        }
+    });
+    
+}); 
+
+
 router.post("/forget-password", async(req, res) => {
     try{
         const db = require("../index").db;

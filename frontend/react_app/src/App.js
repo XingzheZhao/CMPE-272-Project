@@ -10,6 +10,7 @@ import Navbar from './Components/Navbar/Navbar';
 import Error from './Components/Error/Error';
 import SearchItem from './Components/SearchItem/SearchItem';
 import Item from './Components/Item/Item';
+import Login from './Components/Login/Login';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" exact element={<Homepage />}/>
             <Route path='/items' exact element={<Homepage />}/>
             <Route path="/auth/:id" exact element={<Auth />}/>
+            <Route path="/login" exact element={< Login/>}/>
             <Route path="/forget-password" exact element={< ForgetPassword/>}/>
             <Route path="/reset-password" exact element={<ResetPassword/>}/>
             <Route path="/item/:id" exact element={<Item/>}/>
