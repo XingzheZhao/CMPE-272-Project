@@ -33,6 +33,24 @@ router.post("/login", async(req, res)=> {
     });
 });
 
+router.get("/users", async (req, res) => {
+    const db = require("../index").db;
+
+    db.query("SELECT * FROM Users", (err, result) => {
+        if (err) {
+            console.error("Query Error: ", err);
+            res.status(500).json({ message: "Internal Server Error" });
+        } 
+        else if (result.length === 0) {
+            res.status(401).json({ message: "No users" });
+        }
+        else{
+            const users = result;
+            res.status(200).json(users);
+        } 
+    });
+    
+});
 
 router.post("/forget-password", async(req, res) => {
     try{
