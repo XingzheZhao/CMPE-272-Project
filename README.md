@@ -1,4 +1,6 @@
 # Spartan Market
+### Team: Software Trio
+### Members: Peizu Li, Markus Valvur, Sam Zhao
 
 ## Developer Note
 
