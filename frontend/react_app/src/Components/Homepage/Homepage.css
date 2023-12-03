@@ -1,5 +1,101 @@
-.title{
+.item_status_tab{
+    margin-left: 10rem;
+    list-style: none;
     display: flex;
+    gap: 10rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.item_status {
+    font-size: 30px;
+    font-weight: bolder;
+    color: gray;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    cursor: pointer;
+}
+
+.item_status:hover {
+    color: brown;
+    text-decoration: underline;
+}
+
+.item_status.active {
+    color: brown;
+    text-decoration: underline; 
+}
+
+hr {
+    width: 95%;
+    height: 5px;
+    border: solid;
+    color: #0055a2;
+    background-color: #0055a2;
+    border-radius: 30px;
+}
+
+.search_container{
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.search {
+    width: 80%;
+    margin-left: 10%;
+}
+
+.items {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 300px));
+    grid-gap: 2em;
     justify-content: center;
+    list-style: none;
+}
+
+.item_container {
     align-items: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.image {
+    height: 150px;
+    width: 200px;
+    cursor: pointer;
+
+    transition: transform 0.3s ease-in-out;
+}
+
+.image:hover {
+    transform: scale(0.95);
+}
+
+.item_info {
+    list-style: none;
+    text-align: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.info {
+    text-align: center;
+}
+
+.item_name {
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.item_name:hover {
+    text-decoration: underline;
+}
+
+.item_price {
+    margin-top: 14px;
+}
+
+.logged-in-as{
+    text-align: right;
+    padding-right: 50px;
 }

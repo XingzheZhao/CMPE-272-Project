@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { IconButton, InputAdornment, TextField } from "@mui/material"
 import { Search } from '@mui/icons-material'
 import axios from 'axios';
 import noImage from '../../image/noImage.png'
-import Cookies from "js-cookie"
 
-import "./Homepage.css"
+import "../Homepage/Homepage.css"
 
-const Homepage = () => {
+const SearchItem = () => {
+    const { text } = useParams();
     const navigate = useNavigate();
 
     const [viewItems, setViewItems] = useState("on sale");
@@ -34,13 +34,14 @@ const Homepage = () => {
     }
 
     const handleViewItem = (itemId) => {
-        navigate(`/item/${itemId}`)
+        navigate(`/item/${itemId}`);
     }
 
     useEffect(() => {
+        const searchText = text.replace("search=","");
         const fetchOnSaleItems = async () => {
             try{
-                const result = await axios.get("http://localhost:3001/items/on-sale-items");
+                const result = await axios.get("http://localhost:3001/items/search-on-sale", {params: {search: searchText}});
                 setOnSaleItems(result.data);
             }
             catch(err){
@@ -49,7 +50,7 @@ const Homepage = () => {
         };
         const fetchInProgressItems = async () => {
             try{
-                const result = await axios.get("http://localhost:3001/items/in-progress-items", {params: {buyer: 1}})
+                const result = await axios.get("http://localhost:3001/items/search-in-progress", {params: {search: searchText, buyer: 1}})
                 setInProgressItems(result.data)
             }
             catch(err) {
@@ -58,27 +59,10 @@ const Homepage = () => {
         }
         fetchInProgressItems();
         fetchOnSaleItems();
-    },[]);
-
-    function getCookie(cname) {
-        let name = cname + "=";
-        let decodedCookie = decodeURIComponent(document.cookie);
-        let ca = decodedCookie.split(';');
-        for(let i = 0; i <ca.length; i++) {
-          let c = ca[i];
-          while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-          }
-          if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-          }
-        }
-        return "";
-      }
+    }, [text])
 
     return (
         <div className='item_page_container'>
-            <p className='logged-in-as'>Logged in as {getCookie("username")}</p>
             <div className='item_status_container'>
                 <ul className='item_status_tab'>
                     <li className={`item_status sale ${viewItems==="on sale"?'active':''}`} onClick={() => handleView("on sale")}>On Sale</li>
@@ -151,6 +135,6 @@ const Homepage = () => {
             </React.Fragment>}
         </div>
     );
-};
+}
 
-export default Homepage;
+export default SearchItem;
