@@ -10,7 +10,7 @@ router.post("/login", async(req, res)=> {
     const username = req.body.username;
     const password = req.body.password;
 
-    db.query("SELECT username, user_password, is_admin FROM Users WHERE username = ?", [username], async (err, result) => {
+    db.query("SELECT user_id, username, user_password, is_admin FROM Users WHERE username = ?", [username], async (err, result) => {
         if (err) {
             console.error("Query Error: ", err);
             res.status(500).json({ message: "Internal Server Error" });

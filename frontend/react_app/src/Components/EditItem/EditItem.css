@@ -1,0 +1,58 @@
+.edit_container{
+    justify-content: center;
+    align-items: center;
+}
+
+.edit_item_image{
+    justify-self: center;
+    width: 30%;
+    height: 30%;
+    cursor: pointer;
+}
+
+.edit_info_container{
+    width: 80%;
+    margin-left: 10%;
+}
+
+.edit_info_inputs{
+    margin-bottom: 1rem;
+}
+
+.area{
+    resize: none;
+    min-width: 100%;
+    min-height: 130px;
+    border-radius: 2px;
+}
+
+.char_warning{
+    text-align: right;
+    margin: 0;
+    font-size: 15px;
+}
+
+.stack{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pricing{
+    display: flex;
+    align-items: center;
+}
+
+.dollor_symbol{
+    padding-right: 10px;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cancel_btn{
+    margin-right: 5rem;
+}
