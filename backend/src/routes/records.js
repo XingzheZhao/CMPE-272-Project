@@ -59,7 +59,7 @@ router.post("/create", async (req, res) => {
                 res.status(500).json({ message: "Internal Server Error" });
             } 
             else if (result.length === 0) {
-                res.status(401).json({ message: "Recrod not created" });
+                res.status(401).json({ message: "Record not created" });
             }
             else{
                 const record = result;
@@ -95,5 +95,30 @@ router.delete("/delete/:id", async (req, res) => {
     }
 });
 
+//create report
+router.post("/report", async (req, res) => {
+    try {
+        const db = require("../index").db;
+        const {record_id, initiator_id, report_reason, report_description} = req.body;
+
+        const sqlS = "INSERT INTO Report (record_id, initiator_id, report_reason, report_description) VALUES (?, ?, ?, ?)";
+
+        db.query(sqlS, [record_id, initiator_id, report_reason, report_description] ,(err, result) => {
+            if (err) {
+                console.error("Query Error: ", err);
+                res.status(500).json({ message: "Internal Server Error" });
+            } 
+            else if (result.length === 0) {
+                res.status(401).json({ message: "Report not created" });
+            }
+            else{
+                const report = result;
+                res.status(200).json(report);
+            } 
+        })
+    } catch (err) {
+        console.log(err)
+    }
+});
 
 module.exports = router;
