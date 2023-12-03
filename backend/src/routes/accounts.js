@@ -9,10 +9,10 @@ require("dotenv").config();
 var saltRounds = 10;
 
 router.post("/login", async (req, res) => {
-  // const db = require("../index").db;
+  const db = require("../index").db;
   const username = req.body.username;
   const password = req.body.password;
-
+  console.Console(username, password);
   db.query(
     "SELECT username, user_password, is_admin FROM Users WHERE username = ?",
     [username],

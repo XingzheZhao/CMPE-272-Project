@@ -17,7 +17,6 @@ const Register = () => {
     phoneNumber: "",
   });
   const [isValidEmail, setIsValidEmail] = useState(true);
-
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
