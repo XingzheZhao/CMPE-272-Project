@@ -28,12 +28,12 @@ const Login = () => {
     return(
         <div className="login-form-container">
             <form className="login-form" onSubmit={handleSubmit}>
-                <h3>Log In</h3>
-                <label htmlFor="username">Username</label>
-                <input value={username} type="text" placeholder="someuser123" id="username" name="username" onChange={e => setUsername(e.target.value)}/>
-                <label htmlFor="password">Password</label>
-                <input value={password} type="password" placeholder="*********" id="password" name="password" onChange={e => setPassword(e.target.value)}/>        
-                <button type='submit'>Log In</button>
+                <h3 className='log-form-title'>Log In</h3>
+                <label className="label-login" htmlFor="username">Username</label>
+                <input className='log-input' value={username} type="text" placeholder="someuser123" id="username" name="username" onChange={e => setUsername(e.target.value)}/>
+                <label className="label-login" htmlFor="password">Password</label>
+                <input className='log-input' value={password} type="password" placeholder="*********" id="password" name="password" onChange={e => setPassword(e.target.value)}/>        
+                <button className='log-button' type='submit'>Log In</button>
             </form>
             <a className="form-swap-button" href='/register'>Don't have an account? Register here!</a>
         </div>
