@@ -3,20 +3,21 @@ const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 const bcrypt = require("bcrypt");
 const nodeMailer = require("nodemailer");
-// const db = require("../config/db");
+const db = require("../config/db");
 require("dotenv").config();
 
 var saltRounds = 10;
 
 router.post("/login", async (req, res) => {
-  const db = require("../index").db;
+  //   const db = require("../index").db;
   const username = req.body.username;
   const password = req.body.password;
-  console.Console(username, password);
+  console.log(username, password);
   db.query(
     "SELECT username, user_password, is_admin FROM Users WHERE username = ?",
     [username],
     async (err, result) => {
+      console.log(result);
       if (err) {
         console.error("Query Error: ", err);
         res.status(500).json({ message: "Internal Server Error" });
