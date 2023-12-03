@@ -75,10 +75,18 @@ const Homepage = () => {
         }
         return "";
       }
+      const handleLogout = (e)=> {
+        e.preventDefault()
+        document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        navigate('/')
+      }
 
     return (
         <div className='item_page_container'>
-            <p className='logged-in-as'>Logged in as {getCookie("username")}</p>
+            <div className='logged-container'>
+                <p className='logged-in-as'>Logged in as {getCookie("username")}</p>
+                <button className='log-out-button' onClick={handleLogout}>Click here to log out</button>
+            </div>
             <div className='item_status_container'>
                 <ul className='item_status_tab'>
                     <li className={`item_status sale ${viewItems==="on sale"?'active':''}`} onClick={() => handleView("on sale")}>On Sale</li>

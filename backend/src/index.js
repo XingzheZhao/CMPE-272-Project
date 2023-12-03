@@ -6,6 +6,7 @@ const db = require("./config/db");
 
 const accounts = require("./routes/accounts");
 const items = require("./routes/items");
+const records = require("./routes/records");
 
 const app = express();
 
@@ -13,6 +14,8 @@ app.use(express.json());
 app.use(cors());
 app.use("/accounts", accounts);
 
+app.use("/items", items);
+app.use("/records", records);
 // app.use("/items", items);
 
 // const db = mysql.createConnection({

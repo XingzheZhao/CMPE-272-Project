@@ -6,7 +6,7 @@
     padding-top: 20px;
  }
  
- label {
+ .label-login {
      text-align: left;
      padding: 0.25rem 0;
  }
@@ -15,7 +15,7 @@
      margin: 0.5rem 0;
  }
  
- button {
+ .log-button {
      background-color: rgb(243, 247, 4);
      border: none;
      padding: 20px;
@@ -29,10 +29,6 @@
      text-decoration: underline;
  }
  
- h3 {
+ .log-form-title {
      text-decoration: underline;
- }
-
- a {
-    padding-bottom: 50px;
  }

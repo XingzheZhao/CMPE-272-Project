@@ -25,7 +25,7 @@ const Register = () => {
     const regex = /@sjsu\.edu$/;
 
     const isValid = regex.test(email);
-    setIsValidEmail(isValid);
+    console.setIsValidEmail(isValid);
   };
 
   const handleChange = (e) => {
