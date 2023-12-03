@@ -7,6 +7,12 @@ import "./Navbar.css"
 const Navbar = () => {
     const navigate = useNavigate();
 
+    const handleLogout = (e)=> {
+        e.preventDefault()
+        document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        navigate('/login')
+     }
+
     return(
         <header>
             <div className="nav_container">
@@ -22,6 +28,7 @@ const Navbar = () => {
                                 Cookies.get("username") ?
                                 <React.Fragment>
                                    <li className="list_item"><Link className='item_link' to='/profile'>Profile</Link></li>
+                                   <li className='list_item'><Link className='item_link' onClick={handleLogout}>logout</Link></li>
                                    {Cookies.get("role") === 'admin' ? <li className="list_item"><Link className='item_link' to='/admin'>Admin</Link></li>:<></>}
                                 </React.Fragment> :
                                 <li className="list_item"><Link className='item_link' to='/login'>login</Link></li>

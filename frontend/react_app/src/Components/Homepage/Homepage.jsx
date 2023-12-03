@@ -61,39 +61,30 @@ const Homepage = () => {
         }
         fetchInProgressItems();
         fetchOnSaleItems();
-    },[]);
+    },[navigate]);
   
   const getBase64 = (buffer) => {
         return btoa(new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
     };
 
-    function getCookie(cname) {
-        let name = cname + "=";
-        let decodedCookie = decodeURIComponent(document.cookie);
-        let ca = decodedCookie.split(';');
-        for(let i = 0; i <ca.length; i++) {
-          let c = ca[i];
-          while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-          }
-          if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-          }
-        }
-        return "";
-      }
-      const handleLogout = (e)=> {
-        e.preventDefault()
-        document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        navigate('/')
-     }
+    // function getCookie(cname) {
+    //     let name = cname + "=";
+    //     let decodedCookie = decodeURIComponent(document.cookie);
+    //     let ca = decodedCookie.split(';');
+    //     for(let i = 0; i <ca.length; i++) {
+    //       let c = ca[i];
+    //       while (c.charAt(0) == ' ') {
+    //         c = c.substring(1);
+    //       }
+    //       if (c.indexOf(name) == 0) {
+    //         return c.substring(name.length, c.length);
+    //       }
+    //     }
+    //     return "";
+    //   }
 
     return (
         <div className='item_page_container'>
-            <div className='logged-container'>
-                <p className='logged-in-as'>Logged in as {getCookie("username")}</p>
-                <button className='log-out-button' onClick={handleLogout}>Click here to log out</button>
-            </div>
             <div className='item_status_container'>
                 <ul className='item_status_tab'>
                     <li className={`item_status sale ${viewItems==="on sale"?'active':''}`} onClick={() => handleView("on sale")}>On Sale</li>

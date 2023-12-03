@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './Login.css'
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import Cookies from "js-cookies";
 
@@ -20,6 +20,13 @@ const Login = () => {
             console.log(res)
             if(res.status === 200){
                 document.cookie = "username=" + username + "; ";
+                Cookies.setItem("id", res.data[0].user_id);
+                if(res.data[0].is_admin){
+                    Cookies.setItem("role", "admin");
+                }
+                else{
+                    Cookies.setItem("role", "user");
+                }
                 navigate('/')
             }
         }).catch(err => console.log(err));

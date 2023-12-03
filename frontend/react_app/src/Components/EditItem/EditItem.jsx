@@ -27,7 +27,7 @@ const EditItem = () => {
             setCharLimit(1000 - result.data[0].item_description.length);
         }
         fetchItem();
-    }, []);
+    }, [id, navigate]);
 
     const getBase64 = (buffer) => {
         return btoa(new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
