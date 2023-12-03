@@ -25,12 +25,6 @@ const Login = () => {
         }).catch(err => console.log(err));
     }
 
-    const handleLogout = (e) => {
-        e.preventDefault();
-        document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        navigate("/")
-    }
-
     return(
         <div className="login-form-container">
             <form className="login-form" onSubmit={handleSubmit}>
@@ -42,12 +36,6 @@ const Login = () => {
                 <button type='submit'>Log In</button>
             </form>
             <a className="form-swap-button" href='/register'>Don't have an account? Register here!</a>
-            <form className="login-form" onSubmit={handleLogout}>
-                <h3>Log Out</h3>
-                <label>Wish to log out?</label>
-                <button type='submit'>Log out</button>
-            </form>
-            <a className="form-swap-button" href='/'>Don't wish to logout? Go to homepage!</a>
         </div>
     )
 }
