@@ -39,7 +39,8 @@ router.post("/login", async (req, res) => {
 
 router.post("/register", async (req, res) => {
   try {
-    const { username, userPassword, fName, lName, email, phoneNum } = req.body;
+    const { username, userPassword, firstName, lastName, email, phoneNumber } =
+      req.body;
     const isAdmin = false;
 
     // check if username and email are taken
@@ -60,10 +61,11 @@ router.post("/register", async (req, res) => {
 
     // gen salt and hash
     salt = await bcrypt.genSalt(saltRounds);
+    console.log(userPassword);
     hashedPassword = await bcrypt.hash(userPassword, salt);
     const [result] = await db.query(
       "INSERT INTO Users (username, user_password, f_name, l_name, email, phone_num) VALUES (?, ?, ?, ?, ?, ?);",
-      [username, hashedPassword, fName, lName, email, phoneNum]
+      [username, hashedPassword, firstName, lastName, email, phoneNumber]
     );
 
     if (result.affectedRows === 1) {

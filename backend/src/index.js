@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/accounts", accounts);
 
-app.use("/items", items);
+// app.use("/items", items);
 
 // const db = mysql.createConnection({
 //     host: process.env.DATABASE_HOST,
