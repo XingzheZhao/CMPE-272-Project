@@ -33,7 +33,6 @@ router.post("/login", async(req, res)=> {
     });
 });
 
-
 router.post("/forget-password", async(req, res) => {
     try{
         const db = require("../index").db;
