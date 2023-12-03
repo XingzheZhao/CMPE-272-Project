@@ -3,7 +3,7 @@ const Joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 const bcrypt = require("bcrypt");
 const nodeMailer = require("nodemailer");
-const db = require("../config/db");
+// const db = require("../config/db");
 require("dotenv").config();
 
 var saltRounds = 10;
