@@ -1,8 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import React from "react";
 
 import "./Navbar.css"
 
 const Navbar = () => {
+    const navigate = useNavigate();
+
     return(
         <header>
             <div className="nav_container">
@@ -13,8 +17,15 @@ const Navbar = () => {
                     <div className="nav_items">
                         <ul className="nav_list">
                             <li className="list_item"><Link className='item_link' to='/items'>Items</Link></li>
-                            <li className="list_item"><Link className='item_link' to='/services'>services</Link></li>
-                            <li className="list_item"><Link className='item_link' to='/login'>login</Link></li>
+                            {/* <li className="list_item"><Link className='item_link' to='/services'>services</Link></li> */}
+                            {
+                                Cookies.get("username") ?
+                                <React.Fragment>
+                                   <li className="list_item"><Link className='item_link' to='/profile'>Profile</Link></li>
+                                   {Cookies.get("role") === 'admin' ? <li className="list_item"><Link className='item_link' to='/admin'>Admin</Link></li>:<></>}
+                                </React.Fragment> :
+                                <li className="list_item"><Link className='item_link' to='/login'>login</Link></li>
+                            }
                         </ul>
                     </div>
                 </nav>

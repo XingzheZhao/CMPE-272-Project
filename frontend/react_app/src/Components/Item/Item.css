@@ -52,6 +52,10 @@
     margin-left: 10%;
 }
 
+.item_information_container {
+    display: flex;
+}
+
 .item_image {
     width: 80%;
     border: none;
@@ -80,4 +84,18 @@
 
 .detail_info {
     text-align: left;
+}
+
+.interested_container{
+    margin-top: 2rem;
+    width: 100%;
+    height: fit-content;
+    position:static;
+}
+
+.progress_btns{
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    gap: 5rem;
 }

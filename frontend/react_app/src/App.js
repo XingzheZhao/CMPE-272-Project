@@ -24,8 +24,8 @@ function App() {
             <Route path="/auth/:id" exact element={<Auth />}/>
             <Route path="/forget-password" exact element={< ForgetPassword/>}/>
             <Route path="/reset-password" exact element={<ResetPassword/>}/>
-            <Route path="/item/:id/edit" exact element={<EditItem/>}/>
-            <Route path="/item/:id" exact element={<Item/>}/>
+            <Route path="/item/:status/:id/edit" exact element={<EditItem/>}/>
+            <Route path="/item/:status/:id" exact element={<Item/>}/>
             <Route path="/items/:text" exact element={<SearchItem/>}/>
             <Route path="*" element={<Error/>}/>
           </Routes>

@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import noImage from '../../image/noImage.png'
-
-import "./Item.css"
+import noImage from '../../image/noImage.png';
+import Cookies from "js-cookie";
 import { Button } from "@mui/material";
 
+import "./Item.css"
+
 const Item = () => {
-    const { id } = useParams();
+    const { status, id } = useParams();
     const [item, setItem] = useState([]);
     const [deleteItem, setDeleteItem] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
+        if(!Cookies.get("username")){
+            return navigate("/login");
+        }
         const fetchItem = async () => {
             const result = await axios.get("http://localhost:3001/items/item", {params: {id: id}});
             const data = result.data[0];
-            console.log(result.data[0])
             setItem(data)
         }
         fetchItem();
@@ -51,8 +54,58 @@ const Item = () => {
         }
     }
 
+    const handleInterested = async () => {
+        try{
+            await axios.post("http://localhost:3001/items/interested-item",
+            {seller: item.username, seller_email: item.email, buyer: Cookies.get("username"), item: item.item_name, id: Cookies.get("id"), item_id: id});
+            navigate("/");
+        }
+        catch(error){
+            console.log(error);
+        }
+    }
+
+    const handleNotInterest = async () => {
+        try{
+            const resp = window.confirm("Are you sure your are not interested?")
+            if(resp){
+                await axios.post("http://localhost:3001/items/not-interest", {item_id: id});
+                navigate("/");
+            }
+        }
+        catch(error){
+            console.log(error)
+        }
+    }
+
+    const handleTranscationComplete = async () => {
+        try{
+            const resp = window.confirm("Warning: Once transcation is complete, you cannot undo this process!")
+            if(resp){
+                await axios.post("http://localhost:3001/items/transcation-complete", {item_id: id})
+                navigate("/");
+            }
+        }
+        catch(error){
+            console.log(error)
+        }
+    }
+
+    const handleTranscationFailed = async () => {
+        try{
+            const resp = window.confirm("Are you sure you don't want to sell this item to this buyer?")
+            if(resp){
+                await axios.post("http://localhost:3001/items/not-interest", {item_id: id});
+                navigate("/");
+            }
+        }
+        catch(error){
+            console.log(error)
+        }
+    }
+
     return(
-        <div className={"item_page_container"}>
+        <div className="item_page_container">
             {deleteItem ? 
                 <div className="warning_container">
                     <div className="warning_header">
@@ -70,13 +123,22 @@ const Item = () => {
                 </div> 
             : <span></span>}
             <div className={deleteItem?"blur":""}>
-                {item.username === "test" ? 
-                    <div className="buttons_container">
-                        <Button variant="outlined" color="primary" onClick={handleEditItem}>Edit</Button>
-                        <Button variant="outlined" className="delete_btn" color="error" onClick={handleDelete}>Delete</Button>
-                    </div> 
-                : 
-                    <span></span>}
+                {
+                    status === "progress" ? 
+                        <></>
+                    :
+                    <React.Fragment>
+                    {
+                        item.username === Cookies.get("username") ? 
+                        <div className="buttons_container">
+                            <Button variant="outlined" color="primary" onClick={handleEditItem}>Edit</Button>
+                            <Button variant="outlined" className="delete_btn" color="error" onClick={handleDelete}>Delete</Button>
+                        </div> 
+                            : 
+                        <></>
+                    }
+                    </React.Fragment>
+                }
                 <div className="item_information_container">
                     <div className="image_container">
                         <img className='item_image' src={item.item_image ? `data:image/*;base64,${getBase64(item.item_image.data)}` : noImage} alt={item.item_name}/>
@@ -99,6 +161,37 @@ const Item = () => {
                             <li className="detail_info"><strong>Seller Email: </strong>{item.email}</li>
                         </ul>
                     </div>
+                </div>
+                <div className="interested_container">
+                    {
+                        status === "progress" ? 
+                        <React.Fragment>
+                            {
+                                item.username === Cookies.get("username") ?
+                                <div className="progress_btns">
+                                    <Button variant="contained" color="error" onClick={handleTranscationFailed}>Transcation Failed</Button>
+                                    <Button variant="contained" color="success" onClick={handleTranscationComplete}>Transcation Complete</Button>
+                                </div>
+                                :
+                                <div>
+                                    <Button variant="contained" color="warning" onClick={handleNotInterest}>Not Interested Anymore?</Button>
+                                </div>
+                            }
+                        </React.Fragment>
+                        :
+                        <React.Fragment>
+                            {
+                                item.username !== Cookies.get("username") ?
+                                <Button
+                                    variant="contained"
+                                    size="large"
+                                    onClick={handleInterested}>
+                                    I am interested on this item
+                                </Button> :
+                                <p>Seller cannot be interested on your own item</p>
+                            }
+                        </React.Fragment>
+                    }
                 </div>
             </div>
         </div>

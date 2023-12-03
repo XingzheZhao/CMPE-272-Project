@@ -4,6 +4,7 @@ import { IconButton, InputAdornment, TextField } from "@mui/material"
 import { Search } from '@mui/icons-material'
 import axios from 'axios';
 import noImage from '../../image/noImage.png'
+import Cookies from 'js-cookie';
 
 import "./Homepage.css"
 
@@ -32,11 +33,14 @@ const Homepage = () => {
         }
     }
 
-    const handleViewItem = (itemId) => {
-        navigate(`/item/${itemId}`)
+    const handleViewItem = (itemId, status) => {
+        navigate(`/item/${status}/${itemId}`, )
     }
 
     useEffect(() => {
+        if(!Cookies.get("username")){
+            return navigate("/login")
+        }
         const fetchOnSaleItems = async () => {
             try{
                 const result = await axios.get("http://localhost:3001/items/on-sale-items");
@@ -48,7 +52,7 @@ const Homepage = () => {
         };
         const fetchInProgressItems = async () => {
             try{
-                const result = await axios.get("http://localhost:3001/items/in-progress-items", {params: {buyer: 1}})
+                const result = await axios.get("http://localhost:3001/items/in-progress-items", {params: {user: Cookies.get("id")}})
                 setInProgressItems(result.data)
             }
             catch(err) {
@@ -108,9 +112,9 @@ const Homepage = () => {
                             <div className='item_container' key={item.item_id}>
                                 {item.item_image ? 
                                 <img className='image' src={`data:image/*;base64,${getBase64(item.item_image.data)}`} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/> 
-                                : <img className='image' src={noImage} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/>}
+                                : <img className='image' src={noImage} alt={item.item_name} onClick={() => handleViewItem(item.item_id, "on sale")}/>}
                                 <ul className='item_info'>
-                                    <li className='info item_name' onClick={() => handleViewItem(item.item_id)}>{item.item_name}</li>
+                                    <li className='info item_name' onClick={() => handleViewItem(item.item_id, "on sale")}>{item.item_name}</li>
                                     <li className='info item_price'>{item.is_exchange ? "Exchange" : <React.Fragment>${item.item_price}</React.Fragment>}</li>
                                 </ul>
                             </div>
@@ -127,9 +131,9 @@ const Homepage = () => {
                         inProgressItems.map((item, index) => (
                             <div className='item_container' key={item.item_id}>
                                     {item.item_image ? <img className='image' src={`data:image/*;base64,${getBase64(item.item_image.data)}`} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/> 
-                                    : <img className='image' src={noImage} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/>}
+                                    : <img className='image' src={noImage} alt={item.item_name} onClick={() => handleViewItem(item.item_id, "progress")}/>}
                                     <ul className='item_info'>
-                                        <li className='info item_name' onClick={() => handleViewItem(item.item_id)}>{item.item_name}</li>
+                                        <li className='info item_name' onClick={() => handleViewItem(item.item_id, "progress")}>{item.item_name}</li>
                                         <li className='info item_price'>{item.is_exchange ? "Exchange" : <React.Fragment>${item.item_price}</React.Fragment>}</li>
                                     </ul>
                             </div>

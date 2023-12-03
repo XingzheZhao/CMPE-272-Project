@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import noImage from '../../image/noImage.png'
 import { Button, Switch, TextField, Typography } from "@mui/material";
+import Cookies from "js-cookie";
 
 import "./EditItem.css"
 
@@ -17,10 +18,13 @@ const EditItem = () => {
     const navigate = useNavigate();
     
     useEffect(() => {
+        if(!Cookies.get("username")){
+            return navigate("/login");
+        }
         const fetchItem = async () => {
             const result = await axios.get("http://localhost:3001/items/item", {params: {id: id}});
             setItem(result.data[0]);
-            setCharLimit(1000 - result.data[0].item_description.length)
+            setCharLimit(1000 - result.data[0].item_description.length);
         }
         fetchItem();
     }, []);
@@ -42,6 +46,7 @@ const EditItem = () => {
 
     const handleClearImg = () => {
         setItem({...item, item_image: null})
+        setImageFromSQL(false);
     }
 
     const handleItemChange = (e) =>{
@@ -80,16 +85,27 @@ const EditItem = () => {
           formData.append('id', id);
           formData.append('item_image', item.item_image);
           formData.append('item_name', item.item_name);
+          formData.append('item_type', item.item_type);
           formData.append('item_description', item.item_description);
           formData.append('is_exchange', item.is_exchange);
           formData.append('item_price', item.item_price);
           formData.append('exchange_demand', item.exchange_demand);
-      
-          await axios.post("http://localhost:3001/items/item/edit", formData, {
-            headers: {
-              'Content-Type': 'multipart/formData',
-            },
-          });
+
+
+          if(imageFromSQL){
+            await axios.post("http://localhost:3001/items/item/edit-no-image", formData);
+          }
+          else if(item.item_image !== null){
+            await axios.post("http://localhost:3001/items/item/edit", formData, {
+                headers: {
+                    'Content-Type': 'multipart/formData',
+                },
+            });
+          }
+          else{
+            await axios.post("http://localhost:3001/items/item/edit-null-image", formData);
+          }
+          navigate("/");
         } catch (err) {
           console.log(err);
           setError(err.message);
@@ -142,6 +158,17 @@ const EditItem = () => {
                     />
                 </div>
                 <div className="edit_info_inputs">
+                    <TextField
+                        name="item_type"
+                        type="text"
+                        variant="outlined"
+                        value={item.item_type}
+                        onChange={e => handleItemChange(e)}
+                        required
+                        fullWidth
+                    />
+                </div>
+                <div className="edit_info_inputs">
                     <textarea
                         className="area"
                         name="item_description"
@@ -187,7 +214,7 @@ const EditItem = () => {
                                 </div>
                         }
                 </div>
-                {/* {error && error} */}
+                {error && <div className="err_msg">{error}</div>}
                 <div className="edit_info_inputs flex">  
                     <div className="cancel_btn"><Button onClick={() => navigate(`/item/${id}`)} variant="contained" color="warning">Cancel</Button></div>
                     <Button onClick={handleSave} variant="contained" color="primary">Save</Button>
