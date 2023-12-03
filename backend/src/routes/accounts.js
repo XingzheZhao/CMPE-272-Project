@@ -130,7 +130,7 @@ router.post("/reset-password", async (req, res) => {
       return res.status(400).json({ message: messages });
     }
 
-    const salt = await bcrypt.genSalt(Number(12));
+    const salt = await bcrypt.genSalt(Number(saltRounds));
     const hashed = await bcrypt.hash(password, salt);
 
     db.query(
