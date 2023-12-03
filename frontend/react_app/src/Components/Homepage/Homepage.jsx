@@ -4,6 +4,7 @@ import { IconButton, InputAdornment, TextField } from "@mui/material"
 import { Search } from '@mui/icons-material'
 import axios from 'axios';
 import noImage from '../../image/noImage.png'
+import Cookies from "js-cookie"
 
 import "./Homepage.css"
 
@@ -59,8 +60,25 @@ const Homepage = () => {
         fetchOnSaleItems();
     },[]);
 
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+
     return (
         <div className='item_page_container'>
+            <p className='logged-in-as'>Logged in as {getCookie("username")}</p>
             <div className='item_status_container'>
                 <ul className='item_status_tab'>
                     <li className={`item_status sale ${viewItems==="on sale"?'active':''}`} onClick={() => handleView("on sale")}>On Sale</li>

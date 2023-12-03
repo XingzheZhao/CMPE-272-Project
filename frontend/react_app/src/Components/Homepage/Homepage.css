@@ -94,3 +94,8 @@ hr {
 .item_price {
     margin-top: 14px;
 }
+
+.logged-in-as{
+    text-align: right;
+    padding-right: 50px;
+}
