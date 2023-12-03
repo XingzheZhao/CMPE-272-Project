@@ -4,6 +4,7 @@ import { IconButton, InputAdornment, TextField } from "@mui/material"
 import { Search } from '@mui/icons-material'
 import axios from 'axios';
 import noImage from '../../image/noImage.png'
+import Cookies from 'js-cookie';
 
 import "../Homepage/Homepage.css"
 
@@ -38,6 +39,9 @@ const SearchItem = () => {
     }
 
     useEffect(() => {
+        if(!Cookies.get("username")){
+            return navigate("/login");
+        }
         const searchText = text.replace("search=","");
         const fetchOnSaleItems = async () => {
             try{

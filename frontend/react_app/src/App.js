@@ -12,6 +12,7 @@ import Error from "./Components/Error/Error";
 import SearchItem from "./Components/SearchItem/SearchItem";
 import Item from "./Components/Item/Item";
 import Login from "./Components/Login/Login";
+import EditItem from './Components/EditItem/EditItem';
 
 function App() {
   return (
@@ -26,8 +27,9 @@ function App() {
             <Route path="/login" exact element={<Login />} />
             <Route path="/forget-password" exact element={<ForgetPassword />} />
             <Route path="/reset-password" exact element={<ResetPassword />} />
-            <Route path="/item/:id" exact element={<Item />} />
-            <Route path="/items/:text" exact element={<SearchItem />} />
+            <Route path="/item/:status/:id/edit" exact element={<EditItem/>}/>
+            <Route path="/item/:status/:id" exact element={<Item/>}/>
+            <Route path="/items/:text" exact element={<SearchItem/>}/>
             <Route path="/register" exact element={<Register />} />
             <Route path="*" element={<Error />} />
           </Routes>
