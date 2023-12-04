@@ -1,21 +1,27 @@
-.login-form-container, .login-form {
+.report-form-container, .report-form {
     display: flex;
     flex-direction: column;
     padding-left: 200px;
     padding-right: 200px;
     padding-top: 20px;
+    padding-bottom: 10px;
  }
  
- .label-login {
+ .label-report {
      text-align: left;
      padding: 0.25rem 0;
  }
  
- input {
+ .rep-input {
      margin: 0.5rem 0;
  }
+
+ .rep-input-desc{
+    margin: 0.5rem 0;
+    height: 50px;
+ }
  
- .log-button {
+ .rep-button {
      background-color: rgb(243, 247, 4);
      border: none;
      padding: 20px;
@@ -29,15 +35,6 @@
      text-decoration: underline;
  }
  
- .log-form-title {
+ .rep-form-title {
      text-decoration: underline;
  }
-
-.to_forgetpassword{
-    cursor: pointer;
-    text-decoration: underline;
-    margin-bottom: 10px;
-    margin-top: 0;
-    padding: 0;
-    color: blue;
-}

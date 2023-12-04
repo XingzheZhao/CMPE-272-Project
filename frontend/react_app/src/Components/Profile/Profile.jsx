@@ -217,7 +217,7 @@ const Profile = () => {
           className={`tab ${activeTab === "selling" ? "active" : ""}`}
           onClick={() => setActiveTab("selling")}
         >
-          Selllling
+          Selling
         </div>
         <div
           className={`tab ${activeTab === "bought" ? "active" : ""}`}

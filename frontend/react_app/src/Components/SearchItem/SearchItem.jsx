@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from "react-router-dom"
-import { IconButton, InputAdornment, TextField } from "@mui/material"
+import { Button, IconButton, InputAdornment, TextField } from "@mui/material"
 import { Search } from '@mui/icons-material'
 import axios from 'axios';
 import noImage from '../../image/noImage.png'
@@ -16,6 +16,8 @@ const SearchItem = () => {
     const [onSaleItems, setOnSaleItems] = useState([]);
     const [inProgressItems, setInProgressItems] = useState([]);
     const [search, setSearch] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 20;
 
     const handleView = (statement) => {
         setViewItems(statement);
@@ -63,7 +65,39 @@ const SearchItem = () => {
         }
         fetchInProgressItems();
         fetchOnSaleItems();
-    }, [text])
+    }, [text, navigate])
+
+    const getBase64 = (buffer) => {
+        return btoa(new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
+    };
+
+    const renderItems = (items) => {
+        return items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage).map((item, index) => (
+          <div className="item_container" key={item.item_id}>
+            {item.item_image ? (
+              <img
+                className="image"
+                src={`data:image/*;base64,${getBase64(item.item_image.data)}`}
+                alt={item.item_name}
+                onClick={() => handleViewItem(item.item_id, viewItems === 'on sale' ? 'on sale' : 'progress')}
+              />
+            ) : (
+              <img
+                className="image"
+                src={noImage}
+                alt={item.item_name}
+                onClick={() => handleViewItem(item.item_id, viewItems === 'on sale' ? 'on sale' : 'progress')}
+              />
+            )}
+            <ul className="item_info">
+              <li className="info item_name" onClick={() => handleViewItem(item.item_id, viewItems === 'on sale' ? 'on sale' : 'progress')}>
+                {item.item_name}
+              </li>
+              <li className="info item_price">{item.is_exchange ? 'Exchange' : <React.Fragment>${item.item_price}</React.Fragment>}</li>
+            </ul>
+          </div>
+        ));
+    };
 
     return (
         <div className='item_page_container'>
@@ -101,7 +135,7 @@ const SearchItem = () => {
                         }}/>
                 </div>
             </div>
-            {viewItems==="on sale" ? 
+            {/* {viewItems==="on sale" ? 
             <React.Fragment>
                 <div className='items_container'>
                     <div className='items'>
@@ -136,7 +170,33 @@ const SearchItem = () => {
                     }
                     </div>
                 </div>
-            </React.Fragment>}
+            </React.Fragment>} */}
+                        <div className="items_container">
+                <div className="items">{viewItems === 'on sale' ? renderItems(onSaleItems) : renderItems(inProgressItems)}</div>
+            </div>
+            <div className="pagination">
+                <Button
+                    disabled={currentPage === 1} onClick={() => setCurrentPage((prev) => prev - 1)}
+                    variant='contained'>
+                    Previous
+                </Button>
+                <span className='page_number'>Page {currentPage}</span>
+                {
+                    viewItems === 'on sale' ?
+                    <Button 
+                        disabled={currentPage * itemsPerPage >= onSaleItems.length} 
+                        onClick={() => setCurrentPage((prev) => prev + 1)}
+                        variant='contained'>
+                        Next
+                    </Button>:
+                    <Button
+                        disabled={currentPage * itemsPerPage >= inProgressItems.length}
+                        onClick={() => setCurrentPage((prev) => prev + 1)}
+                        variant='contained'>
+                        Next
+                    </Button>
+                }
+            </div>
         </div>
     );
 }
