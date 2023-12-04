@@ -85,7 +85,7 @@ const Profile = () => {
               <td>{item.item_name}</td>
               <td>{item.item_type}</td>
               <td>{item.item_price}</td>
-              <td>{item.is_exchange}</td>
+              <td>{item.is_exchange === 1 ? "Yes" : "No"}</td>
               <td>{item.post_datetime}</td>
               <td>{item.item_description}</td>
             </tr>
@@ -115,7 +115,7 @@ const Profile = () => {
               <td>{item.item_name}</td>
               <td>{item.item_type}</td>
               <td>{item.item_price}</td>
-              <td>{item.is_exchange}</td>
+              <td>{item.is_exchange === 1 ? "Yes" : "No"}</td>
               <td>{item.post_datetime}</td>
               <td>{item.item_description}</td>
             </tr>
