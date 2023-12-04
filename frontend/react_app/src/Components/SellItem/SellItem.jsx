@@ -82,24 +82,12 @@ const SellItem = () => {
     const handleSell = async (e) => {
         try{
             e.preventDefault();
-            if(data.item_name === ""){
+            if(data.item_name === "" 
+                || data.item_description === "" 
+                || data.item_type === "" 
+                || (data.is_exchange && data.exchange_demand === "")
+                || (data.is_exchange && data.exchange_demand === null)){
                 setError("Missing Attribute");
-            }
-            else if(data.item_description === ""){
-                setError("Missing Attribute");
-            }
-            else if(data.item_type === ""){
-                setError("Missing Attribute");
-            }
-            else if(data.exchange_demand === ""){
-                if(data.is_exchange){
-                    setError("Missing Attribute");
-                }
-            }
-            else if(data.exchange_demand === null){
-                if(data.is_exchange){
-                    setError("Missing Attribute")
-                }
             }
             else{
                 const formData = new FormData();

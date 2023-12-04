@@ -32,9 +32,9 @@ const Navbar = () => {
                                     <li className="list_item"><Link className='item_link' to='/items'>Items</Link></li>
                                     <li className="list_item"><Link className="item_link" to='/sell-item'>Sell Item</Link></li>
                                     <li className="list_item"><Link className='item_link' to='/profile'>Profile</Link></li>
+                                    {Cookies.get("role") === 'admin' ? <li className="list_item"><Link className='item_link' to='/admin'>Admin</Link></li>:<></>}
                                     <li className='list_item'><Link className='item_link' onClick={handleLogout}>logout</Link></li>
                                     {/* <li className="list_item"><Link className='item_link' to='/services'>services</Link></li> */}
-                                    {Cookies.get("role") === 'admin' ? <li className="list_item"><Link className='item_link' to='/admin'>Admin</Link></li>:<></>}
                                 </React.Fragment> :
                                 <li className="list_item"><Link className='item_link' to='/login'>login</Link></li>
                             }

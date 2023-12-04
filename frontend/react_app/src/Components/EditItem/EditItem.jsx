@@ -82,24 +82,12 @@ const EditItem = () => {
         try {
             e.preventDefault();
 
-            if(item.item_name === ""){
+            if(item.item_name === "" 
+                || item.item_description === "" 
+                || item.item_type === "" 
+                || (item.is_exchange && item.exchange_demand === "")
+                || (item.is_exchange && item.exchange_demand === null)){
                 setError("Missing Attribute");
-            }
-            else if(item.item_description === ""){
-                setError("Missing Attribute");
-            }
-            else if(item.item_type === ""){
-                setError("Missing Attribute");
-            }
-            else if(item.exchange_demand === ""){
-                if(item.is_exchange){
-                    setError("Missing Attribute");
-                }
-            }
-            else if(item.exchange_demand === null){
-                if(item.is_exchange){
-                    setError("Missing Attribute")
-                }
             }
             else{
                 const formData = new FormData();

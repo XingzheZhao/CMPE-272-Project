@@ -181,11 +181,11 @@ router.post("/item/edit", upload.single('item_image'), async (req, res) => {
         let { is_exchange } = req.body;
         const item_image = req.file.buffer;
 
-        if(is_exchange){
-            is_exchange = 1;
+        if(is_exchange === "true" || is_exchange === "1"){
+            is_exchange = true;
         }
         else{
-            is_exchange = 0;
+            is_exchange = false;
         }
             
         const sql = "UPDATE Item SET item_name = ?, item_type = ?, item_description = ?, item_image = ?, is_exchange = ?, item_price = ?, exchange_demand = ? WHERE item_id = ?";
@@ -214,11 +214,11 @@ router.post("/item/edit-null-image", upload.single('item_image'), async (req, re
         if (exchange_demand === "null") {
             exchange_demand = null;
         }
-        if(is_exchange){
-            is_exchange = 1;
+        if(is_exchange === "true" || is_exchange === "1"){
+            is_exchange = true;
         }
         else{
-            is_exchange = 0;
+            is_exchange = false;
         }
 
         const sql = "UPDATE Item SET item_name = ?, item_type = ?, item_description = ?, item_image = NULL, is_exchange = ?, item_price = ?, exchange_demand = ? WHERE item_id = ?";
@@ -246,11 +246,11 @@ router.post("/item/edit-no-image", upload.single('item_image'), async (req, res)
         if (exchange_demand === "null") {
             exchange_demand = null;
         }
-        if(is_exchange){
-            is_exchange = 1;
+        if(is_exchange === "true" || is_exchange === "1"){
+            is_exchange = true;
         }
         else{
-            is_exchange = 0;
+            is_exchange = false;
         }
 
         const sql = "UPDATE Item SET item_name = ?, item_type = ?, item_description = ?, is_exchange = ?, item_price = ?, exchange_demand = ? WHERE item_id = ?";
@@ -320,24 +320,29 @@ router.post("/item/create-null-image", upload.single('item_image'), async (req, 
     if(exchange_demand === "null"){
         exchange_demand = null;
     }
-    if(is_exchange){
-        is_exchange = 1;
+    const sql = "INSERT INTO Item (seller_id, item_name, item_type, item_price, is_exchange, exchange_demand, item_image, item_status, post_datetime, item_description) VALUES (?, ?, ?, ?, ?, ?, NULL, ?, NOW(), ?)" 
+    if(is_exchange === "true" || is_exchange === "1"){
+        db.query(sql, [id, item_name, item_type, item_price, true, exchange_demand, "on sale", item_description], (err, result) => {
+            if(err){
+                console.log(err);
+                res.status(500).json("Internal Server Error");
+            }
+            else{
+                res.status(200).json(result);
+            }
+        })
     }
     else{
-        is_exchange = 0;
-    } 
-
-    const sql = "INSERT INTO Item (seller_id, item_name, item_type, item_price, is_exchange, exchange_demand, item_image, item_status, post_datetime, item_description) VALUES (?, ?, ?, ?, ?, ?, NULL, ?, NOW(), ?)"
-    
-    db.query(sql, [id, item_name, item_type, item_price, is_exchange, exchange_demand, "on sale", item_description], (err, result) => {
-        if(err){
-            console.log(err);
-            res.status(500).json("Internal Server Error");
-        }
-        else{
-            res.status(200).json(result);
-        }
-    })
+        db.query(sql, [id, item_name, item_type, item_price, false, exchange_demand, "on sale", item_description], (err, result) => {
+            if(err){
+                console.log(err);
+                res.status(500).json("Internal Server Error");
+            }
+            else{
+                res.status(200).json(result);
+            }
+        })
+    }
 })
 
 router.post("/item/create", upload.single('item_image'), async (req, res) => {
@@ -348,11 +353,11 @@ router.post("/item/create", upload.single('item_image'), async (req, res) => {
         if(exchange_demand === "null"){
             exchange_demand = null;
         }
-        if(is_exchange){
-            is_exchange = 1;
+        if(is_exchange === "true" || is_exchange === "1"){
+            is_exchange = true;
         }
         else{
-            is_exchange = 0;
+            is_exchange = false;
         }
         const item_image = req.file.buffer;
             
