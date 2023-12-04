@@ -2,16 +2,20 @@ import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import React from "react";
 
-import "./Navbar.css"
+import "./Navbar.css";
 
 const Navbar = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleLogout = (e)=> {
-        e.preventDefault()
-        document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        navigate('/login')
-     }
+  const handleLogout = (e) => {
+    e.preventDefault();
+    // document.cookie =
+    //   "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    Cookies.remove("username");
+    Cookies.remove("id");
+    Cookies.remove("role");
+    navigate("/login");
+  };
 
     return(
         <header>
@@ -41,6 +45,7 @@ const Navbar = () => {
             </div>
         </header>
     );
+
 };
 
 export default Navbar;
