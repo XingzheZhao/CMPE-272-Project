@@ -1,0 +1,40 @@
+.report-form-container, .report-form {
+    display: flex;
+    flex-direction: column;
+    padding-left: 200px;
+    padding-right: 200px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+ }
+ 
+ .label-report {
+     text-align: left;
+     padding: 0.25rem 0;
+ }
+ 
+ .rep-input {
+     margin: 0.5rem 0;
+ }
+
+ .rep-input-desc{
+    margin: 0.5rem 0;
+    height: 50px;
+ }
+ 
+ .rep-button {
+     background-color: rgb(243, 247, 4);
+     border: none;
+     padding: 20px;
+     border-radius: 10px;
+     cursor: pointer;
+ }
+ 
+ .form-swap-button {
+     background: none;
+     color: blue;
+     text-decoration: underline;
+ }
+ 
+ .rep-form-title {
+     text-decoration: underline;
+ }
