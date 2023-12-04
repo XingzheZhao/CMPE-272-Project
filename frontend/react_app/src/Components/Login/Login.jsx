@@ -39,7 +39,8 @@ const Login = () => {
                 <label className="label-login" htmlFor="username">Username</label>
                 <input className='log-input' value={username} type="text" placeholder="someuser123" id="username" name="username" onChange={e => setUsername(e.target.value)}/>
                 <label className="label-login" htmlFor="password">Password</label>
-                <input className='log-input' value={password} type="password" placeholder="*********" id="password" name="password" onChange={e => setPassword(e.target.value)}/>        
+                <input className='log-input' value={password} type="password" placeholder="*********" id="password" name="password" onChange={e => setPassword(e.target.value)}/>
+                <p className='to_forgetpassword' onClick={()=>{navigate("/forget-password")}}>Forget Password?</p>   
                 <button className='log-button' type='submit'>Log In</button>
             </form>
             <a className="form-swap-button" href='/register'>Don't have an account? Register here!</a>

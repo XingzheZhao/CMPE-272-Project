@@ -1,67 +1,67 @@
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import noImage from '../../image/noImage.png';
 import { Button, Switch, TextField, Typography } from "@mui/material";
 import Cookies from "js-cookie";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import noImage from '../../image/noImage.png'
+import axios from "axios";
 
-import "./EditItem.css"
+import "./SellItem.css";
 
-const EditItem = () => {
-    const { status, id } = useParams();
-    const [item, setItem] = useState({});
-    const [imageFromSQL, setImageFromSQL] = useState(true);
+const SellItem = () => {
+    const username = Cookies.get("username");
+    const id = Cookies.get("id");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(!username){
+            navigate("/login");
+        }
+    }, [username, navigate])
+
+    const [data, setData] = useState({
+        seller_id: id,
+        item_name: "",
+        item_type: "",
+        item_price: 0.0,
+        is_exchange: false,
+        exchange_demand: null,
+        item_image: null,
+        item_description: ""
+    });
     const [charLimit, setCharLimit] = useState(1000);
     const [error, setError] = useState("");
-
-    const navigate = useNavigate();
-    
-    useEffect(() => {
-        if(!Cookies.get("username")){
-            return navigate("/login");
-        }
-        const fetchItem = async () => {
-            const result = await axios.get("http://localhost:3001/items/item", {params: {id: id}});
-            setItem(result.data[0]);
-            setCharLimit(1000 - result.data[0].item_description.length);
-        }
-        fetchItem();
-    }, [id, navigate]);
-
-    const getBase64 = (buffer) => {
-        return btoa(new Uint8Array(buffer).reduce((data, byte) => data + String.fromCharCode(byte), ''));
-    };
 
     const handleImageChange = (e) => {
         const selectedImage = e.target.files[0];
 
         if (selectedImage && selectedImage.type.startsWith('image/')) {
-          setItem({...item, item_image: selectedImage});
-          setImageFromSQL(false);
+          setData({...data, item_image: selectedImage});
         } else {
           console.log('Invalid file selected. Please choose a valid image file.');
         }
+        setError("");
     }
 
     const handleClearImg = () => {
-        setItem({...item, item_image: null})
-        setImageFromSQL(false);
+        setData({...data, item_image: null})
+        setError("");
     }
 
     const handleItemChange = (e) =>{
-        setItem({...item, [e.target.name]: e.target.value})
+        setData({...data, [e.target.name]: e.target.value})
+        setError("");
     }
 
     const handleDescriptionChange = (e) => {
         if(e.target.value.length <= 1000){
-            setItem({...item, [e.target.name]: e.target.value})
+            setData({...data, [e.target.name]: e.target.value})
             setCharLimit(1000 - e.target.value.length)
         }
+        setError("");
     }
 
     const handleIsExchange = () => {
-        setItem((prevItem) => {
+        setData((prevItem) => {
             const status = Boolean(prevItem.is_exchange);
             const updatedItem = {
               ...prevItem,
@@ -75,52 +75,67 @@ const EditItem = () => {
               updatedItem.exchange_demand = null;
             }
             return updatedItem;
-          });
+        });
+        setError("");
     }
 
-    const handleSave = async (e) => {
-        try {
-          e.preventDefault();
-          const formData = new FormData();
-          formData.append('id', id);
-          formData.append('item_image', item.item_image);
-          formData.append('item_name', item.item_name);
-          formData.append('item_type', item.item_type);
-          formData.append('item_description', item.item_description);
-          formData.append('is_exchange', item.is_exchange);
-          formData.append('item_price', item.item_price);
-          formData.append('exchange_demand', item.exchange_demand);
+    const handleSell = async (e) => {
+        try{
+            e.preventDefault();
+            if(data.item_name === ""){
+                setError("Missing Attribute");
+            }
+            else if(data.item_description === ""){
+                setError("Missing Attribute");
+            }
+            else if(data.item_type === ""){
+                setError("Missing Attribute");
+            }
+            else if(data.is_exchange){
+                if(data.exchange_demane === ""){
+                    setError("Missing Attribute");
+                }
+            }
+            else{
+                const formData = new FormData();
+                formData.append('id', data.seller_id);
+                formData.append('item_image', data.item_image);
+                formData.append('item_name', data.item_name);
+                formData.append('item_type', data.item_type);
+                formData.append('item_description', data.item_description);
+                formData.append('is_exchange', data.is_exchange);
+                formData.append('item_price', data.item_price);
+                formData.append('exchange_demand', data.exchange_demand);
 
-          if(imageFromSQL){
-            await axios.post("http://localhost:3001/items/item/edit-no-image", formData);
-          }
-          else if(item.item_image !== null){
-            await axios.post("http://localhost:3001/items/item/edit", formData, {
-                headers: {
-                    'Content-Type': 'multipart/formData',
-                },
-            });
-          }
-          else{
-            await axios.post("http://localhost:3001/items/item/edit-null-image", formData);
-          }
-          navigate("/");
-        } catch (err) {
-          console.log(err);
-          setError(err.message);
+                if(data.item_image === null){
+                    await axios.post("http://localhost:3001/items/item/create-null-image", formData);
+                }
+                else{
+                    await axios.post("http://localhost:3001/items/item/create", formData, {
+                        headers: {
+                            'Content-Type': 'multipart/formData',
+                        },
+                    }); 
+                }
+                navigate("/");
+            }
+        }
+        catch (err){
+            console.log(err);
+            setError("Error Occurs");
         }
     }
 
-    return (
-        <div className="edit_container">
+    return(
+        <div className="create_sell_container">
             <div className="edit_image_container">
-                {item.item_image ? (
+                {data.item_image ? (
                     <React.Fragment>
                         <label>
                             <img
                                 className="edit_item_image"
-                                src={!imageFromSQL ? URL.createObjectURL(item.item_image) : `data:image/*;base64,${getBase64(item.item_image.data)}`}
-                                alt={item.item_name} />
+                                src={URL.createObjectURL(data.item_image)}
+                                alt={data.item_name} />
                             <input
                                 type="file"
                                 accept="image/*"
@@ -135,7 +150,7 @@ const EditItem = () => {
                         <img
                             className="edit_item_image"
                             src={noImage}
-                            alt={item.item_name}/>
+                            alt={data.item_name}/>
                         <input
                             type="file"
                             accept="image/*"
@@ -143,14 +158,16 @@ const EditItem = () => {
                             onChange={handleImageChange}/>
                     </label>
                 )}
-        </div>
+            </div>
             <div className="edit_info_container">
                 <div className="edit_info_inputs">
                     <TextField
                         name="item_name"
+                        label="Item Name"
+                        placeholder="Item Name"
                         type="text"
                         variant="outlined"
-                        value={item.item_name}
+                        value={data.item_name}
                         onChange={e => handleItemChange(e)}
                         required
                         fullWidth
@@ -159,9 +176,11 @@ const EditItem = () => {
                 <div className="edit_info_inputs">
                     <TextField
                         name="item_type"
+                        label="Item Type"
+                        placeholder="Item Type"
                         type="text"
                         variant="outlined"
-                        value={item.item_type}
+                        value={data.item_type}
                         onChange={e => handleItemChange(e)}
                         required
                         fullWidth
@@ -171,8 +190,9 @@ const EditItem = () => {
                     <textarea
                         className="area"
                         name="item_description"
+                        placeholder="Item Description"
                         type="text"
-                        value={item.item_description}
+                        value={data.item_description}
                         onChange={(e) => handleDescriptionChange(e)}
                         required/>
                     <p className="char_warning">Characters remaining: {charLimit}/1000</p>
@@ -180,19 +200,21 @@ const EditItem = () => {
                 <div className="edit_info_inputs">
                     <div className="stack">
                         <Typography>Price</Typography>
-                        <Switch checked={item.is_exchange} onClick={handleIsExchange}/>
+                        <Switch checked={data.is_exchange} onClick={handleIsExchange}/>
                         <Typography>Exchange</Typography>
                     </div>
                 </div>
                 <div className="edit_info_inputs">
                         {
-                            item.is_exchange ? 
+                            data.is_exchange ? 
                                 <div>
                                     <TextField
                                         name="exchange_demand"
+                                        label="Exchange Demand"
+                                        placeholder="Exchange Demand"
                                         type="text"
                                         variant="outlined"
-                                        value={item.exchange_demand}
+                                        value={data.exchange_demand}
                                         onChange={e => handleItemChange(e)}
                                         required
                                         fullWidth
@@ -203,9 +225,10 @@ const EditItem = () => {
                                     <p className="dollor_symbol">$</p>
                                     <TextField
                                         name="item_price"
+                                        label="Item Price"
                                         type="number"
                                         variant="outlined"
-                                        value={item.item_price}
+                                        value={data.item_price}
                                         onChange={e => handleItemChange(e)}
                                         required
                                         fullWidth
@@ -215,12 +238,13 @@ const EditItem = () => {
                 </div>
                 {error && <div className="err_msg">{error}</div>}
                 <div className="edit_info_inputs flex">  
-                    <div className="cancel_btn"><Button onClick={() => navigate(`/item/${status}/${id}`)} variant="contained" color="warning">Cancel</Button></div>
-                    <Button onClick={handleSave} variant="contained" color="primary">Save</Button>
+                    <div className="cancel_btn"><Button onClick={() => navigate("/")} variant="contained" color="warning">Cancel</Button></div>
+                    <Button onClick={handleSell} variant="contained" color="primary">Sell</Button>
                 </div>
             </div>
         </div>
-    )
+    );
+
 }
 
-export default EditItem;
+export default SellItem;

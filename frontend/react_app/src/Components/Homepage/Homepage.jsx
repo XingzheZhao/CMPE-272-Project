@@ -127,7 +127,7 @@ const Homepage = () => {
                         onSaleItems.map((item, index) => (
                             <div className='item_container' key={item.item_id}>
                                 {item.item_image ? 
-                                <img className='image' src={`data:image/*;base64,${getBase64(item.item_image.data)}`} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/> 
+                                <img className='image' src={`data:image/*;base64,${getBase64(item.item_image.data)}`} alt={item.item_name} onClick={() => handleViewItem(item.item_id, "on sale")}/> 
                                 : <img className='image' src={noImage} alt={item.item_name} onClick={() => handleViewItem(item.item_id, "on sale")}/>}
                                 <ul className='item_info'>
                                     <li className='info item_name' onClick={() => handleViewItem(item.item_id, "on sale")}>{item.item_name}</li>
@@ -146,7 +146,7 @@ const Homepage = () => {
                     {
                         inProgressItems.map((item, index) => (
                             <div className='item_container' key={item.item_id}>
-                                    {item.item_image ? <img className='image' src={`data:image/*;base64,${getBase64(item.item_image.data)}`} alt={item.item_name} onClick={() => handleViewItem(item.item_id)}/> 
+                                    {item.item_image ? <img className='image' src={`data:image/*;base64,${getBase64(item.item_image.data)}`} alt={item.item_name} onClick={() => handleViewItem(item.item_id, "progress")}/> 
                                     : <img className='image' src={noImage} alt={item.item_name} onClick={() => handleViewItem(item.item_id, "progress")}/>}
                                     <ul className='item_info'>
                                         <li className='info item_name' onClick={() => handleViewItem(item.item_id, "progress")}>{item.item_name}</li>

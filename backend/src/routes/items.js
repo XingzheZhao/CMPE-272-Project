@@ -292,7 +292,58 @@ router.post("/transcation-complete", async (req, res) => {
         console.log(err);
         res.status(500).json("Internal Server Error")
     }
+});
+
+router.post("/item/create-null-image", upload.single('item_image'), async (req, res) => {
+    const db = require("../index").db;
+
+    const { id, item_name, item_description, item_price, item_type, is_exchange } = req.body;
+    let { exchange_demand } = req.body;
+    if(exchange_demand === "null"){
+        exchange_demand = null;
+    }
+
+    console.log(id, item_name, item_description, item_price, item_type, is_exchange, exchange_demand)
+    const sql = "INSERT INTO Item (seller_id, item_name, item_type, item_price, is_exchange, exchange_demand, item_image, item_status, post_datetime, item_description) VALUES (?, ?, ?, ?, ?, ?, NULL, ?, NOW(), ?)"
+    
+    db.query(sql, [id, item_name, item_type, item_price, is_exchange, exchange_demand, "on sale", item_description], (err, result) => {
+        if(err){
+            console.log(err);
+            res.status(500).json("Internal Server Error");
+        }
+        else{
+            res.status(200).json(result);
+        }
+    })
 })
+
+router.post("/item/create", upload.single('item_image'), async (req, res) => {
+    try{
+        const db = require('../index').db;
+        const { id, item_name, item_description, item_price, item_type, is_exchange } = req.body;
+        let { exchange_demand } = req.body;
+        if(exchange_demand === "null"){
+            exchange_demand = null;
+        }
+        const item_image = req.file.buffer;
+            
+        const sql = "INSERT INTO Item (seller_id, item_name, item_type, item_price, is_exchange, exchange_demand, item_image, item_status, post_datetime, item_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)"
+        db.query(sql, [id, item_name, item_type, item_price, is_exchange, exchange_demand, item_image, "on sale", item_description], (err, result) => {
+            if(err){
+                console.log(err);
+                res.status(500).json("Internal Server Error");
+            }
+            else{
+                console.log(result)
+                res.status(200).json(result)
+            }
+        })
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json("Internal Server Error")
+    }
+});
 
 const sendMail = async (seller, seller_email, item, buyer, buyer_email) => {
     const text = buyer + " is interested on your item: " + item;
