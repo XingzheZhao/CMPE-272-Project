@@ -41,10 +41,10 @@ router.post("/forget-password", async(req, res) => {
         db.query("SELECT * FROM Users WHERE username = ? AND email = ?", [username, email], (err, result) => {
             if (err) {
                 console.error("Query Error: ", err);
-                res.status(500).json({ message: "Internal Server Error" });
+                return res.status(500).json({ message: "Internal Server Error" });
             } 
             else if (result.length === 0) {
-                res.status(401).json({ message: "Username/Email does not exist" });
+                return res.status(401).json({ message: "Username/Email does not exist" });
             } 
         });
 

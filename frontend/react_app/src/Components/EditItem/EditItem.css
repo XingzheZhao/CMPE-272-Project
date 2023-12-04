@@ -24,6 +24,11 @@
     min-width: 100%;
     min-height: 130px;
     border-radius: 2px;
+    border-color: lightgray;
+}
+
+.area:hover{
+    border-color: black;
 }
 
 .char_warning{
