@@ -32,7 +32,7 @@ function App() {
             <Route path="/item/:status/:id" exact element={<Item />} />
             <Route path="/items/:text" exact element={<SearchItem />} />
             <Route path="/register" exact element={<Register />} />
-            <Route path="/profile/:id" exact element={<Profile />} />
+            <Route path="/profile" exact element={<Profile />} />
             <Route path="*" element={<Error />} />
           </Routes>
         </div>

@@ -11,7 +11,6 @@ router.post("/login", async (req, res) => {
   const db = require("../index").db;
   const username = req.body.username;
   const password = req.body.password;
-
   db.query(
     "SELECT user_id, username, user_password, is_admin FROM Users WHERE username = ?",
     [username],
@@ -248,36 +247,45 @@ const sendMail = async (receiver) => {
 //   }
 // };
 
-router.get("/profile/:id", async (req, res, next) => {
+router.get("/profile", async (req, res, next) => {
   try {
+    // Access the cookies from the request object
+    const username = req.cookies.username;
+    const userId = req.cookies.id;
+    const role = req.cookies.role;
+
+    // validate cookie
+    if (!username) {
+      return res.status(401).json({ message: "User Not Authenticated!" });
+    }
+
     // get user info
     const [userProfile] = await db.query(
       "SELECT username, f_name, l_name, email, phone_num FROM Users WHERE user_id=?;",
-      [req.params.id]
+      [userId]
     );
     // selling item
     const [sellingItem] = await db.query(
       "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description FROM Item WHERE seller_id=? AND item_status!='sold';",
-      [req.params.id]
+      [userId]
     );
 
     // buying item
     const [buyingItem] = await db.query(
       "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description FROM Item WHERE buyer_id=? AND item_status!='sold';",
-      [req.params.id]
+      [userId]
     );
 
     // history
     const [soldHistory] = await db.query(
       "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description FROM Item WHERE seller_id=? AND item_status='sold';",
-      [req.params.id, req.params.id]
+      [userId]
     );
 
     const [boughtHistory] = await db.query(
       "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description FROM Item WHERE buyer_id=? AND item_status='sold';",
-      [req.params.id, req.params.id]
+      [userId]
     );
-
     res.status(200).json({
       userProfile: userProfile,
       sellingItem: sellingItem,

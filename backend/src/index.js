@@ -1,6 +1,7 @@
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const accounts = require("./routes/accounts");
@@ -8,6 +9,7 @@ const items = require("./routes/items");
 const records = require("./routes/records");
 
 const app = express();
+app.use(cookieParser());
 
 app.use(express.json());
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));

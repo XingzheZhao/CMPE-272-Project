@@ -15,7 +15,7 @@ const Profile = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/accounts/profile/${id.id}`,
+        `http://localhost:3001/accounts/profile`,
         { withCredentials: true }
       );
 
@@ -139,7 +139,7 @@ const Profile = () => {
           </tr>
         </thead>
         <tbody>
-          {buyingItem.map((item, i) => (
+          {buyingHistory.map((item, i) => (
             <tr key={i}>
               <td>{item.item_name}</td>
               <td>{item.item_type}</td>
@@ -167,7 +167,7 @@ const Profile = () => {
           </tr>
         </thead>
         <tbody>
-          {buyingItem.map((item, i) => (
+          {sellingHistory.map((item, i) => (
             <tr key={i}>
               <td>{item.item_name}</td>
               <td>{item.item_type}</td>
@@ -211,13 +211,13 @@ const Profile = () => {
           className={`tab ${activeTab === "buying" ? "active" : ""}`}
           onClick={() => setActiveTab("buying")}
         >
-          Items That I Am Trying To Buy
+          Buying
         </div>
         <div
           className={`tab ${activeTab === "selling" ? "active" : ""}`}
           onClick={() => setActiveTab("selling")}
         >
-          Items That I Am Trying To Sell
+          Selllling
         </div>
         <div
           className={`tab ${activeTab === "bought" ? "active" : ""}`}
