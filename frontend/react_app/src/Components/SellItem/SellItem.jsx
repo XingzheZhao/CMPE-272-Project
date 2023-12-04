@@ -91,9 +91,14 @@ const SellItem = () => {
             else if(data.item_type === ""){
                 setError("Missing Attribute");
             }
-            else if(data.is_exchange){
-                if(data.exchange_demane === ""){
+            else if(data.exchange_demand === ""){
+                if(data.is_exchange){
                     setError("Missing Attribute");
+                }
+            }
+            else if(data.exchange_demand === null){
+                if(data.is_exchange){
+                    setError("Missing Attribute")
                 }
             }
             else{

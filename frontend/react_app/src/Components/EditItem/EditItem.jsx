@@ -80,31 +80,53 @@ const EditItem = () => {
 
     const handleSave = async (e) => {
         try {
-          e.preventDefault();
-          const formData = new FormData();
-          formData.append('id', id);
-          formData.append('item_image', item.item_image);
-          formData.append('item_name', item.item_name);
-          formData.append('item_type', item.item_type);
-          formData.append('item_description', item.item_description);
-          formData.append('is_exchange', item.is_exchange);
-          formData.append('item_price', item.item_price);
-          formData.append('exchange_demand', item.exchange_demand);
+            e.preventDefault();
 
-          if(imageFromSQL){
-            await axios.post("http://localhost:3001/items/item/edit-no-image", formData);
-          }
-          else if(item.item_image !== null){
-            await axios.post("http://localhost:3001/items/item/edit", formData, {
-                headers: {
-                    'Content-Type': 'multipart/formData',
-                },
-            });
-          }
-          else{
-            await axios.post("http://localhost:3001/items/item/edit-null-image", formData);
-          }
-          navigate("/");
+            if(item.item_name === ""){
+                setError("Missing Attribute");
+            }
+            else if(item.item_description === ""){
+                setError("Missing Attribute");
+            }
+            else if(item.item_type === ""){
+                setError("Missing Attribute");
+            }
+            else if(item.exchange_demand === ""){
+                if(item.is_exchange){
+                    setError("Missing Attribute");
+                }
+            }
+            else if(item.exchange_demand === null){
+                if(item.is_exchange){
+                    setError("Missing Attribute")
+                }
+            }
+            else{
+                const formData = new FormData();
+                formData.append('id', id);
+                formData.append('item_image', item.item_image);
+                formData.append('item_name', item.item_name);
+                formData.append('item_type', item.item_type);
+                formData.append('item_description', item.item_description);
+                formData.append('is_exchange', item.is_exchange);
+                formData.append('item_price', item.item_price);
+                formData.append('exchange_demand', item.exchange_demand);
+      
+                if(imageFromSQL){
+                  await axios.post("http://localhost:3001/items/item/edit-no-image", formData);
+                }
+                else if(item.item_image !== null){
+                  await axios.post("http://localhost:3001/items/item/edit", formData, {
+                      headers: {
+                          'Content-Type': 'multipart/formData',
+                      },
+                  });
+                }
+                else{
+                  await axios.post("http://localhost:3001/items/item/edit-null-image", formData);
+                }
+                navigate("/");
+            }
         } catch (err) {
           console.log(err);
           setError(err.message);
