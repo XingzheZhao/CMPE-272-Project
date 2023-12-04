@@ -113,7 +113,7 @@ const EditItem = () => {
                 else{
                   await axios.post("http://localhost:3001/items/item/edit-null-image", formData);
                 }
-                navigate("/");
+                navigate(`/item/${status}/${id}`);
             }
         } catch (err) {
           console.log(err);
