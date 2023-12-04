@@ -307,4 +307,32 @@ router.get("/profile", async (req, res, next) => {
   }
 });
 
+router.get("/admin", async (req, res, next) => {
+  try {
+    const username = req.cookies.username;
+    const userId = req.cookies.id;
+    const role = req.cookies.role;
+
+    // check cookie for admin
+    if (!username || role !== "admin") {
+      return res.status(401).json({ message: "Admin Not Authenticated!" });
+    }
+
+    // get recent history
+    const [completedSell] = await db.query(
+      "SELECT i.item_name, i.item_type, i.item_price, seller.username AS seller_username, buyer.username AS buyer_username, i.post_datetime FROM Item i LEFT JOIN Users seller ON i.seller_id=seller.user_id LEFT JOIN Users buyer ON i.buyer_id=buyer.user_id WHERE i.item_Status='sold';"
+    );
+
+    // get reports
+    const [reports] = await db.query(
+      "SELECT initiator.username AS initiator_username, r.report_reason, r.report_description, r.item_id, i.item_name, r.is_solved FROM Report r INNER JOIN Users initiator ON r.initiator_id=initiator.user_id LEFT JOIN Item i ON r.item_id=i.item_id;"
+    );
+
+    res.status(200).json({ completedSell: completedSell, report: reports });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
 module.exports = router;
