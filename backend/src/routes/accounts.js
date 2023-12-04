@@ -39,54 +39,60 @@ router.post("/login", async (req, res) => {
 
 router.post("/register", async (req, res) => {
   try {
-    const { username, userPassword, firstName, lastName, email, phoneNumber } =
-      req.body;
+    const { username, email } = req.body;
 
-    const isAdmin = false;
+    await db.query("SELECT * FROM Users WHERE username = ? OR email = ?", [username, email], (err, result) => {
+      if(err){
+        console.log(err);
+        return res.status(500).json({message: "Internal Server Error"});
+      }
+      else if(result.length !== 0){
+        return res.status(401).json({message: "User Exists"});
+      }
+    });
 
-    // check if username and email are taken
+    const result = await sendMail(email);
 
-    const [checkUsername] = await db.query(
-      "SELECT * FROM Users WHERE username=?",
-      [username]
-    );
-
-    if (checkUsername.length > 0) {
-      return res.status(409).json({ message: "Username is taken!" });
-    }
-
-    const [checkEmail] = await db.query("SELECT * FROM Users WHERE email=?", [
-      email,
-    ]);
-
-    if (checkEmail.length > 0) {
-      return res.status(409).json({ message: "Email is taken!" });
-    }
-
-    // gen salt and hash
-    let salt = await bcrypt.genSalt(saltRounds);
-    let hashedPassword = await bcrypt.hash(userPassword, salt);
-    const [result] = await db.query(
-      "INSERT INTO Users (username, user_password, f_name, l_name, email, phone_num, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?);",
-      [
-        username,
-        hashedPassword,
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
-        isAdmin,
-      ]
-    );
-
-    if (result.affectedRows === 1) {
-      return res.status(201).json({ message: "User has been created!" });
+    if (result === false) {
+      res.status(410).json({ message: "Email cannot send" });
     } else {
-      return res.status(500).json({ message: "Internal server error" });
+      res
+        .status(202)
+        .json({ message: "Email sent", code: result });
     }
   } catch (error) {
     console.error("Error registering user", error);
     return res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+router.post("/register/auth", async (req, res) => {
+  try{
+    const db = require("../index").db;
+    const { data, code, hashed_code } = req.body;
+    const isAdmin = false;
+
+    const valid = await bcrypt.compare(code, hashed_code);
+    if (!valid) return res.status(401).json({ message: "Invalid code" });
+
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(data.userPassword, salt);
+    
+    await db.query(
+      "INSERT INTO Users (username, user_password, f_name, l_name, email, phone_num, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?);",
+      [data.username, hashedPassword, data.firstName, data.lastName, data.email, data.phoneNumber, isAdmin], (err, result) => {
+        if(err){
+          console.log(err);
+          res.status(500).json({message: "Internal Server Error"});
+        }
+        else{
+          res.status(200).json(result);
+        }
+    });
+  }
+  catch(error){
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Erorr" });
   }
 });
 
@@ -101,9 +107,9 @@ router.post("/forget-password", async (req, res) => {
       (err, result) => {
         if (err) {
           console.error("Query Error: ", err);
-          res.status(500).json({ message: "Internal Server Error" });
+          return res.status(500).json({ message: "Internal Server Error" });
         } else if (result.length === 0) {
-          res.status(401).json({ message: "Username/Email does not exist" });
+          return res.status(401).json({ message: "Username/Email does not exist" });
         }
       }
     );
