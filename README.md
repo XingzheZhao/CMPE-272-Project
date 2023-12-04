@@ -8,7 +8,7 @@ Contact peizu.li@sjsu.edu for the .env file.
 
 ### Backend
 
-get the .env file
+get the .env file (the name of the file will be "env", you need to rename it to ".env")
 
 go to the backend directory
 
