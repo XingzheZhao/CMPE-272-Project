@@ -12,6 +12,7 @@ import SearchItem from './Components/SearchItem/SearchItem';
 import Item from './Components/Item/Item';
 import Login from './Components/Login/Login';
 import EditItem from './Components/EditItem/EditItem';
+import Report from './Components/Report/Report'
 import SellItem from './Components/SellItem/SellItem';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="/item/:status/:id/edit" exact element={<EditItem/>}/>
             <Route path="/item/:status/:id" exact element={<Item/>}/>
             <Route path="/items/:text" exact element={<SearchItem/>}/>
+            <Route path="/item/:status/:id/report" exact element={<Report />}/>
             <Route path='/sell-item' exact element={<SellItem/>}/>
             <Route path="*" element={<Error/>}/>
           </Routes>

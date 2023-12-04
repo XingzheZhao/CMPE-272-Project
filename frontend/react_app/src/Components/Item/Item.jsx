@@ -65,6 +65,11 @@ const Item = () => {
         }
     }
 
+    const handleReport = (e) => {
+        e.preventDefault();
+        navigate("report");
+    }
+
     const handleNotInterest = async () => {
         try{
             const resp = window.confirm("Are you sure your are not interested?")
@@ -175,6 +180,9 @@ const Item = () => {
                                 :
                                 <div>
                                     <Button variant="contained" color="warning" onClick={handleNotInterest}>Not Interested Anymore?</Button>
+                                    <br></br>
+                                    <br></br>
+                                    <Button className="rep-but" variant="contained" size="large" onClick={handleReport}>File a report</Button>
                                 </div>
                             }
                         </React.Fragment>
@@ -188,7 +196,22 @@ const Item = () => {
                                     onClick={handleInterested}>
                                     I am interested on this item
                                 </Button> :
-                                <p>Seller cannot be interested on your own item</p>
+                                <p>Seller cannot be interested on their own item</p>
+                                
+                            }
+                            <br></br>
+                            <br></br>
+                            {
+                                item.username !== Cookies.get("username") ?
+                                <Button
+                                    className="rep-but"
+                                    variant="contained"
+                                    size="large"
+                                    onClick={handleReport}>
+                                    File a report
+                                </Button> :
+                                <p>Seller cannot file a report their your own item</p>
+                                
                             }
                         </React.Fragment>
                     }
