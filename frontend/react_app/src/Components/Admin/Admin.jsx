@@ -33,7 +33,7 @@ const Admin = () => {
 
   const renderCompletedSell = () => (
     <div className="table-view">
-      <h2>Recent History</h2>
+      <h2>Recent Completed Sales</h2>
       <table>
         <thead>
           <tr>
@@ -109,7 +109,7 @@ const Admin = () => {
           className={`tab ${activeTab === "completedSell" ? "active" : ""}`}
           onClick={() => setActiveTab("completedSell")}
         >
-          Recent History
+          Recent Completed Sales
         </div>
         <div
           className={`tab ${activeTab === "report" ? "active" : ""}`}
