@@ -21,15 +21,15 @@ const Register = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const validateEmail = (email) => {
-    const regex = /@sjsu\.edu$/;
+  // const validateEmail = (email) => {
+  //   const regex = /@sjsu\.edu$/;
 
-    const isValid = regex.test(email);
+  //   const isValid = regex.test(email);
 
-    console.log(`isvalid: ${isValid}`);
+  //   console.log(`isvalid: ${isValid}`);
 
-    console.setIsValidEmail(isValid);
-  };
+  //   console.setIsValidEmail(isValid);
+  // };
 
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -43,7 +43,6 @@ const Register = () => {
     // check email validation first
     try {
       const url = "http://localhost:3001/accounts/register";
-
       const { data: res } = await axios.post(url, data);
 
       navigate("/login");
@@ -85,7 +84,7 @@ const Register = () => {
 
           <div className="register-field">
             <TextField
-              name="password"
+              name="userPassword"
               label="Please Enter Your Password Here"
               type="text"
               variant="outlined"

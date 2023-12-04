@@ -6,7 +6,8 @@ const nodeMailer = require("nodemailer");
 require("dotenv").config();
 const db = require("../../config/db");
 
-saltRounds = 10;
+var saltRounds = 10;
+
 router.post("/login", async (req, res) => {
   const db = require("../index").db;
   const username = req.body.username;
@@ -46,7 +47,6 @@ router.post("/register", async (req, res) => {
 
     const [checkUsername] = await db.query(
       "SELECT * FROM Users WHERE username=?",
-
       [username]
     );
 
@@ -63,17 +63,19 @@ router.post("/register", async (req, res) => {
     }
 
     // gen salt and hash
-
-    salt = await bcrypt.genSalt(saltRounds);
-
-    console.log(userPassword);
-
-    hashedPassword = await bcrypt.hash(userPassword, salt);
-
+    let salt = await bcrypt.genSalt(saltRounds);
+    let hashedPassword = await bcrypt.hash(userPassword, salt);
     const [result] = await db.query(
-      "INSERT INTO Users (username, user_password, f_name, l_name, email, phone_num) VALUES (?, ?, ?, ?, ?, ?);",
-
-      [username, hashedPassword, firstName, lastName, email, phoneNumber]
+      "INSERT INTO Users (username, user_password, f_name, l_name, email, phone_num, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?);",
+      [
+        username,
+        hashedPassword,
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        isAdmin,
+      ]
     );
 
     if (result.affectedRows === 1) {
@@ -83,7 +85,6 @@ router.post("/register", async (req, res) => {
     }
   } catch (error) {
     console.error("Error registering user", error);
-
     return res.status(500).json({ message: "Internal Server Error" });
   }
 });
