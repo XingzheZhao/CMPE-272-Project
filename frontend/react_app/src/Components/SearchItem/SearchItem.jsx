@@ -36,8 +36,8 @@ const SearchItem = () => {
         }
     }
 
-    const handleViewItem = (itemId) => {
-        navigate(`/item/${itemId}`);
+    const handleViewItem = (itemId, status) => {
+        navigate(`/item/${status}/${itemId}`);
     }
 
     useEffect(() => {
