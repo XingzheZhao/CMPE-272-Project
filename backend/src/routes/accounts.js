@@ -4,7 +4,9 @@ const passwordComplexity = require("joi-password-complexity");
 const bcrypt = require("bcrypt");
 const nodeMailer = require("nodemailer");
 require("dotenv").config();
+const db = require("../../config/db");
 
+saltRounds = 10;
 router.post("/login", async (req, res) => {
   const db = require("../index").db;
   const username = req.body.username;
@@ -235,5 +237,58 @@ const sendMail = async (receiver) => {
     return false;
   }
 };
+
+// const validationCookie = (req, res, next) => {
+//   const username = req.cookies.username;
+//   if (!username) {
+//     return res.status(401).json({ message: "User Not Authenticated" });
+//   } else {
+//     req.user = username;
+//     return next();
+//   }
+// };
+
+router.get("/profile/:id", async (req, res, next) => {
+  try {
+    // get user info
+    const [userProfile] = await db.query(
+      "SELECT username, f_name, l_name, email, phone_num FROM Users WHERE user_id=?;",
+      [req.params.id]
+    );
+    // selling item
+    const [sellingItem] = await db.query(
+      "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description FROM Item WHERE seller_id=? AND item_status!='sold';",
+      [req.params.id]
+    );
+
+    // buying item
+    const [buyingItem] = await db.query(
+      "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description FROM Item WHERE buyer_id=? AND item_status!='sold';",
+      [req.params.id]
+    );
+
+    // history
+    const [soldHistory] = await db.query(
+      "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description FROM Item WHERE seller_id=? AND item_status='sold';",
+      [req.params.id, req.params.id]
+    );
+
+    const [boughtHistory] = await db.query(
+      "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description FROM Item WHERE buyer_id=? AND item_status='sold';",
+      [req.params.id, req.params.id]
+    );
+
+    res.status(200).json({
+      userProfile: userProfile,
+      sellingItem: sellingItem,
+      buyingItem: buyingItem,
+      soldHistory: soldHistory,
+      boughtHistory: boughtHistory,
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
 
 module.exports = router;

@@ -41,29 +41,24 @@ const Register = () => {
     setIsLoading(true);
 
     // check email validation first
+    try {
+      const url = "http://localhost:3001/accounts/register";
 
-    if (!isValidEmail) {
-      setError("You must use your SJSU EMail Address!");
-    } else {
-      try {
-        const url = "http://localhost:3001/accounts/register";
+      const { data: res } = await axios.post(url, data);
 
-        const { data: res } = await axios.post(url, data);
+      navigate("/login");
 
-        navigate("/login");
-
-        window.AbortController.reloard();
-      } catch (err) {
-        if (
-          err.response &&
-          err.response.status >= 400 &&
-          err.response.status <= 500
-        ) {
-          setError(err.response.data.message);
-        }
-      } finally {
-        setIsLoading(false);
+      window.AbortController.reloard();
+    } catch (err) {
+      if (
+        err.response &&
+        err.response.status >= 400 &&
+        err.response.status <= 500
+      ) {
+        setError(err.response.data.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
