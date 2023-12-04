@@ -177,8 +177,16 @@ router.post("/interested-item", async (req, res) => {
 router.post("/item/edit", upload.single('item_image'), async (req, res) => {
     try{
         const db = require('../index').db;
-        const { id, item_name, item_description, is_exchange, item_price, exchange_demand, item_type } = req.body;
+        const { id, item_name, item_description, item_price, exchange_demand, item_type } = req.body;
+        let { is_exchange } = req.body;
         const item_image = req.file.buffer;
+
+        if(is_exchange){
+            is_exchange = 1;
+        }
+        else{
+            is_exchange = 0;
+        }
             
         const sql = "UPDATE Item SET item_name = ?, item_type = ?, item_description = ?, item_image = ?, is_exchange = ?, item_price = ?, exchange_demand = ? WHERE item_id = ?";
         db.query(sql, [item_name, item_type, item_description, item_image, is_exchange, item_price, exchange_demand, id], (err, result) => {
@@ -187,7 +195,6 @@ router.post("/item/edit", upload.single('item_image'), async (req, res) => {
                 res.status(401).json({message: "Update Item Error"})
             }
             else{
-                console.log(result)
                 res.status(200).json(result)
             }
         })
@@ -201,11 +208,17 @@ router.post("/item/edit", upload.single('item_image'), async (req, res) => {
 router.post("/item/edit-null-image", upload.single('item_image'), async (req, res) => {
     try {
         const db = require('../index').db;
-        const { id, item_name, item_description, is_exchange, item_price, item_type } = req.body;
-        let { exchange_demand } = req.body;
+        const { id, item_name, item_description, item_price, item_type } = req.body;
+        let { is_exchange, exchange_demand } = req.body;
 
         if (exchange_demand === "null") {
             exchange_demand = null;
+        }
+        if(is_exchange){
+            is_exchange = 1;
+        }
+        else{
+            is_exchange = 0;
         }
 
         const sql = "UPDATE Item SET item_name = ?, item_type = ?, item_description = ?, item_image = NULL, is_exchange = ?, item_price = ?, exchange_demand = ? WHERE item_id = ?";
@@ -227,15 +240,20 @@ router.post("/item/edit-null-image", upload.single('item_image'), async (req, re
 router.post("/item/edit-no-image", upload.single('item_image'), async (req, res) => {
     try {
         const db = require('../index').db;
-        const { id, item_name, item_description, is_exchange, item_price, item_type } = req.body;
-        let { exchange_demand } = req.body;
+        const { id, item_name, item_description, item_price, item_type } = req.body;
+        let { is_exchange, exchange_demand } = req.body;
 
         if (exchange_demand === "null") {
             exchange_demand = null;
         }
+        if(is_exchange){
+            is_exchange = 1;
+        }
+        else{
+            is_exchange = 0;
+        }
 
         const sql = "UPDATE Item SET item_name = ?, item_type = ?, item_description = ?, is_exchange = ?, item_price = ?, exchange_demand = ? WHERE item_id = ?";
-        
         db.query(sql, [item_name, item_type, item_description, is_exchange, item_price, exchange_demand, id], (err, result) => {
             if (err) {
                 console.log(err);
@@ -292,7 +310,68 @@ router.post("/transcation-complete", async (req, res) => {
         console.log(err);
         res.status(500).json("Internal Server Error")
     }
+});
+
+router.post("/item/create-null-image", upload.single('item_image'), async (req, res) => {
+    const db = require("../index").db;
+
+    const { id, item_name, item_description, item_price, item_type } = req.body;
+    let { is_exchange, exchange_demand } = req.body;
+    if(exchange_demand === "null"){
+        exchange_demand = null;
+    }
+    if(is_exchange){
+        is_exchange = 1;
+    }
+    else{
+        is_exchange = 0;
+    } 
+
+    const sql = "INSERT INTO Item (seller_id, item_name, item_type, item_price, is_exchange, exchange_demand, item_image, item_status, post_datetime, item_description) VALUES (?, ?, ?, ?, ?, ?, NULL, ?, NOW(), ?)"
+    
+    db.query(sql, [id, item_name, item_type, item_price, is_exchange, exchange_demand, "on sale", item_description], (err, result) => {
+        if(err){
+            console.log(err);
+            res.status(500).json("Internal Server Error");
+        }
+        else{
+            res.status(200).json(result);
+        }
+    })
 })
+
+router.post("/item/create", upload.single('item_image'), async (req, res) => {
+    try{
+        const db = require('../index').db;
+        const { id, item_name, item_description, item_price, item_type } = req.body;
+        let { is_exchange, exchange_demand } = req.body;
+        if(exchange_demand === "null"){
+            exchange_demand = null;
+        }
+        if(is_exchange){
+            is_exchange = 1;
+        }
+        else{
+            is_exchange = 0;
+        }
+        const item_image = req.file.buffer;
+            
+        const sql = "INSERT INTO Item (seller_id, item_name, item_type, item_price, is_exchange, exchange_demand, item_image, item_status, post_datetime, item_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)"
+        db.query(sql, [id, item_name, item_type, item_price, is_exchange, exchange_demand, item_image, "on sale", item_description], (err, result) => {
+            if(err){
+                console.log(err);
+                res.status(500).json("Internal Server Error");
+            }
+            else{
+                res.status(200).json(result)
+            }
+        })
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json("Internal Server Error")
+    }
+});
 
 const sendMail = async (seller, seller_email, item, buyer, buyer_email) => {
     const text = buyer + " is interested on your item: " + item;
