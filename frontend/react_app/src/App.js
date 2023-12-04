@@ -1,6 +1,6 @@
-import React from 'react'
-import {BrowserRouter, Routes, Route} from 'react-router-dom'
-import './App.css';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
 
 import Auth from './Components/Auth/Auth';
 import ForgetPassword from './Components/ForgetPassword/ForgetPassword';
@@ -14,13 +14,16 @@ import Login from './Components/Login/Login';
 import EditItem from './Components/EditItem/EditItem';
 import Report from './Components/Report/Report'
 import SellItem from './Components/SellItem/SellItem';
+import Register from "./Components/Register/Register";
+import Profile from "./Components/Profile/Profile";
+
 
 function App() {
   return (
     <BrowserRouter>
       <div className="App">
-      <Navbar/>
-        <div className='content'>
+        <Navbar />
+        <div className="content">
           <Routes>
             <Route path="/" exact element={<Homepage />}/>
             <Route path='/items' exact element={<Homepage />}/>
@@ -33,6 +36,8 @@ function App() {
             <Route path="/items/:text" exact element={<SearchItem/>}/>
             <Route path="/item/:status/:id/report" exact element={<Report />}/>
             <Route path='/sell-item' exact element={<SellItem/>}/>
+            <Route path="/register" exact element={<Register />} />
+            <Route path="/profile" exact element={<Profile />} />
             <Route path="*" element={<Error/>}/>
           </Routes>
         </div>
