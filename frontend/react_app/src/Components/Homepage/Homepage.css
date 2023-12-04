@@ -108,3 +108,14 @@ hr {
 .logged-container{
     text-align: right;
 }
+
+.pagination{
+    align-items: center;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+}
+
+.page_number{
+    margin-left: 10px;
+    margin-right: 10px;
+}
