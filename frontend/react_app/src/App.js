@@ -16,6 +16,7 @@ import Report from './Components/Report/Report'
 import SellItem from './Components/SellItem/SellItem';
 import Register from "./Components/Register/Register";
 import Profile from "./Components/Profile/Profile";
+import Admin from "./Components/Admin/Admin";
 
 
 function App() {
@@ -38,7 +39,8 @@ function App() {
             <Route path='/sell-item' exact element={<SellItem/>}/>
             <Route path="/register" exact element={<Register />} />
             <Route path="/profile" exact element={<Profile />} />
-            <Route path="*" element={<Error/>}/>
+            <Route path="/admin" exact element={<Admin />} />
+            <Route path="*" element={<Error />} />
           </Routes>
         </div>
       </div>
