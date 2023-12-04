@@ -2,7 +2,9 @@
   display: flex;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 20px;
+  padding-top: 40px;
+  padding-right: 325px;
+  padding-left: 20px;
 }
 
 .tab {
