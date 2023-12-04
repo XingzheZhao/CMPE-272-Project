@@ -14,6 +14,7 @@ import Login from "./Components/Login/Login";
 import EditItem from "./Components/EditItem/EditItem";
 import Register from "./Components/Register/Register";
 import Profile from "./Components/Profile/Profile";
+import Admin from "./Components/Admin/Admin";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             <Route path="/items/:text" exact element={<SearchItem />} />
             <Route path="/register" exact element={<Register />} />
             <Route path="/profile" exact element={<Profile />} />
+            <Route path="/admin" exact element={<Admin />} />
             <Route path="*" element={<Error />} />
           </Routes>
         </div>
