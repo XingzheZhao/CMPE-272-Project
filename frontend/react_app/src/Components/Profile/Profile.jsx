@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Profile.css";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
 const Profile = () => {
@@ -82,7 +82,11 @@ const Profile = () => {
         <tbody>
           {sellingItem.map((item, i) => (
             <tr key={i}>
-              <td>{item.item_name}</td>
+              <td>
+                <Link to={`/item/progress/${item.item_id}`}>
+                  {item.item_name}
+                </Link>
+              </td>
               <td>{item.item_type}</td>
               <td>{item.item_price}</td>
               <td>{item.is_exchange === 1 ? "Yes" : "No"}</td>
@@ -112,7 +116,11 @@ const Profile = () => {
         <tbody>
           {buyingItem.map((item, i) => (
             <tr key={i}>
-              <td>{item.item_name}</td>
+              <td>
+                <Link to={`/item/progress/${item.item_id}`}>
+                  {item.item_name}
+                </Link>
+              </td>
               <td>{item.item_type}</td>
               <td>{item.item_price}</td>
               <td>{item.is_exchange === 1 ? "Yes" : "No"}</td>

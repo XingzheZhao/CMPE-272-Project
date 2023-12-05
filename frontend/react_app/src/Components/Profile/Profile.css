@@ -1,62 +1,47 @@
 .user-profile {
   display: flex;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding-top: 40px;
-  padding-right: 320px;
-  padding-left: 20px;
+  margin: 20px;
 }
 
 .tab {
-  display: flex;
-  flex-direction: column;
-  margin-right: 20px;
-}
-
-.tab div {
+  padding: 10px;
   cursor: pointer;
-  padding: 12px;
-  margin-bottom: 10px;
-  background-color: rgb(248, 229, 107);
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  text-align: center;
-  width: 150px;
+  border-right: 2px solid transparent;
+  transition: border-right 0.3s ease-in-out;
 }
 
-.tab div.active {
-  background-color: rgb(15, 115, 228);
-  color: white;
+.tab.active {
+  border-right: 2px solid #3498db;
+  background-color: #ecf0f1;
 }
 
 .tab-content {
   flex: 1;
-  margin-left: 20px; /* Adjust the distance from the tab */
+  padding: 20px;
 }
 
 .profile-info {
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 5px;
   margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f8f8f8;
+}
+
+.profile-info h2 {
+  color: #3498db;
+  margin-bottom: 15px;
 }
 
 .profile-info div {
-  display: flex;
-  justify-content: space-between;
   margin-bottom: 10px;
 }
 
-.selling-items,
-.buying-items,
-.history {
-  margin-top: 20px;
-}
-
+/* Styling for the tables */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 th,
@@ -64,22 +49,32 @@ td {
   border: 1px solid #ddd;
   padding: 15px;
   text-align: left;
+}
+
+/* Styling for the item tabs */
+.selling-items h2,
+.buying-items h2,
+.history h2 {
+  color: #3498db;
+  margin-bottom: 15px;
+}
+
+/* Styling for the item description */
+.selling-items td,
+.buying-items td,
+.history td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-th {
-  background-color: #f2f2f2;
+/* Styling for the exchange status */
+.selling-items .exchange-status,
+.buying-items .exchange-status {
+  color: #27ae60; /* Green color for 'Yes' */
 }
 
-/* Media query for responsiveness */
-@media screen and (max-width: 768px) {
-  .user-profile {
-    flex-direction: column;
-  }
-
-  .tab {
-    margin-right: 0;
-  }
+.selling-items .exchange-status[data-status="No"],
+.buying-items .exchange-status[data-status="No"] {
+  color: #e74c3c; /* Red color for 'No' */
 }

@@ -36,29 +36,29 @@ router.post("/login", async (req, res) => {
   );
 });
 
-
 router.post("/register", async (req, res) => {
   try {
     const { username, email } = req.body;
 
-    await db.query("SELECT * FROM Users WHERE username = ? OR email = ?", [username, email], (err, result) => {
-      if(err){
-        console.log(err);
-        return res.status(500).json({message: "Internal Server Error"});
+    await db.query(
+      "SELECT * FROM Users WHERE username = ? OR email = ?",
+      [username, email],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({ message: "Internal Server Error" });
+        } else if (result.length !== 0) {
+          return res.status(401).json({ message: "User Exists" });
+        }
       }
-      else if(result.length !== 0){
-        return res.status(401).json({message: "User Exists"});
-      }
-    });
+    );
 
     const result = await sendMail(email);
 
     if (result === false) {
       res.status(410).json({ message: "Email cannot send" });
     } else {
-      res
-        .status(202)
-        .json({ message: "Email sent", code: result });
+      res.status(202).json({ message: "Email sent", code: result });
     }
   } catch (error) {
     console.error("Error registering user", error);
@@ -67,7 +67,7 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/register/auth", async (req, res) => {
-  try{
+  try {
     const db = require("../index").db;
     const { data, code, hashed_code } = req.body;
     const isAdmin = false;
@@ -77,20 +77,28 @@ router.post("/register/auth", async (req, res) => {
 
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(data.userPassword, salt);
-    
+
     await db.query(
       "INSERT INTO Users (username, user_password, f_name, l_name, email, phone_num, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?);",
-      [data.username, hashedPassword, data.firstName, data.lastName, data.email, data.phoneNumber, isAdmin], (err, result) => {
-        if(err){
+      [
+        data.username,
+        hashedPassword,
+        data.firstName,
+        data.lastName,
+        data.email,
+        data.phoneNumber,
+        isAdmin,
+      ],
+      (err, result) => {
+        if (err) {
           console.log(err);
-          res.status(500).json({message: "Internal Server Error"});
-        }
-        else{
+          res.status(500).json({ message: "Internal Server Error" });
+        } else {
           res.status(200).json(result);
         }
-    });
-  }
-  catch(error){
+      }
+    );
+  } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal Server Erorr" });
   }
@@ -109,7 +117,9 @@ router.post("/forget-password", async (req, res) => {
           console.error("Query Error: ", err);
           return res.status(500).json({ message: "Internal Server Error" });
         } else if (result.length === 0) {
-          return res.status(401).json({ message: "Username/Email does not exist" });
+          return res
+            .status(401)
+            .json({ message: "Username/Email does not exist" });
         }
       }
     );
@@ -255,6 +265,25 @@ const sendMail = async (receiver) => {
 //   }
 // };
 
+// convert datetime format
+function formatDateTime(inputDateTime) {
+  // Parse the input datetime string
+  const dateTime = new Date(inputDateTime);
+
+  // Get the individual components of the date and time
+  const year = dateTime.getFullYear();
+  const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+  const day = String(dateTime.getDate()).padStart(2, "0");
+  const hours = String(dateTime.getHours()).padStart(2, "0");
+  const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+  const seconds = String(dateTime.getSeconds()).padStart(2, "0");
+
+  // Format the date and time according to your desired output
+  const formattedDateTime = `${month}-${day}-${year} ${hours}:${minutes}:${seconds}`;
+
+  return formattedDateTime;
+}
+
 router.get("/profile", async (req, res, next) => {
   try {
     // Access the cookies from the request object
@@ -274,13 +303,13 @@ router.get("/profile", async (req, res, next) => {
     );
     // selling item
     const [sellingItem] = await db.query(
-      "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description FROM Item WHERE seller_id=? AND item_status!='sold';",
+      "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description, item_id FROM Item WHERE seller_id=? AND item_status!='sold';",
       [userId]
     );
 
     // buying item
     const [buyingItem] = await db.query(
-      "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description FROM Item WHERE buyer_id=? AND item_status!='sold';",
+      "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description, item_id FROM Item WHERE buyer_id=? AND item_status!='sold';",
       [userId]
     );
 
@@ -294,6 +323,22 @@ router.get("/profile", async (req, res, next) => {
       "SELECT item_name, item_type, item_price, is_exchange, exchange_demand, post_datetime, item_description FROM Item WHERE buyer_id=? AND item_status='sold';",
       [userId]
     );
+
+    sellingItem.forEach((row) => {
+      row.post_datetime = formatDateTime(row.post_datetime);
+    });
+
+    buyingItem.forEach((row) => {
+      row.post_datetime = formatDateTime(row.post_datetime);
+    });
+
+    boughtHistory.forEach((row) => {
+      row.post_datetime = formatDateTime(row.post_datetime);
+    });
+
+    soldHistory.forEach((row) => {
+      row.post_datetime = formatDateTime(row.post_datetime);
+    });
     res.status(200).json({
       userProfile: userProfile,
       sellingItem: sellingItem,
