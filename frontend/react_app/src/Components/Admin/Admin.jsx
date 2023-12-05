@@ -103,7 +103,7 @@ const Admin = () => {
   };
 
   return (
-    <div className="admin">
+    <div className="user-profile">
       <div className="tab">
         <div
           className={`tab ${activeTab === "completedSell" ? "active" : ""}`}

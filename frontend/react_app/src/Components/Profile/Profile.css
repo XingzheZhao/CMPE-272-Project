@@ -1,23 +1,44 @@
+/* Profile.css */
 .user-profile {
   display: flex;
   margin: 20px;
 }
 
 .tab {
-  padding: 10px;
+  padding: 15px;
   cursor: pointer;
-  border-right: 2px solid transparent;
-  transition: border-right 0.3s ease-in-out;
+  border-right: 3px solid transparent;
+  transition: border-right 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  margin-bottom: 10px;
+  background-color: #f7ca18; /* Light yellow background for tabs */
+  color: #000; /* Black text color for tabs */
+  border-radius: 5px; /* Rounded corners for tabs */
 }
 
 .tab.active {
-  border-right: 2px solid #3498db;
-  background-color: #ecf0f1;
+  border-right: 3px solid #3498db;
+  background-color: #d8dcde; /* Darker yellow background for the active tab */
+  color: #007bff; /* Blue text color for the active tab */
+  font-weight: bold; /* Added font-weight for better visibility */
 }
 
 .tab-content {
   flex: 1;
   padding: 20px;
+}
+
+/* Additional styling for the tables */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
 }
 
 .profile-info {
@@ -37,15 +58,47 @@
   margin-bottom: 10px;
 }
 
-/* Styling for the tables */
-table {
+.profile-info strong {
+  margin-right: 10px;
+}
+
+.selling-items,
+.buying-items,
+.history {
+  margin-top: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .user-profile {
+    flex-direction: column;
+  }
+
+  .tab {
+    margin-right: 0;
+    border-right: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  .tab.active {
+    border-bottom: 3px solid #3498db;
+  }
+}
+
+/* Styling for the item tables */
+.selling-items table,
+.buying-items table,
+.history table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
-th,
-td {
+.selling-items th,
+.buying-items th,
+.history th,
+.selling-items td,
+.buying-items td,
+.history td {
   border: 1px solid #ddd;
   padding: 15px;
   text-align: left;
@@ -66,15 +119,4 @@ td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-
-/* Styling for the exchange status */
-.selling-items .exchange-status,
-.buying-items .exchange-status {
-  color: #27ae60; /* Green color for 'Yes' */
-}
-
-.selling-items .exchange-status[data-status="No"],
-.buying-items .exchange-status[data-status="No"] {
-  color: #e74c3c; /* Red color for 'No' */
 }
