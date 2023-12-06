@@ -12,28 +12,24 @@ const Login = () => {
   const [err, setErr] = useState("");
 
   const navigate = useNavigate();
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post(url, { username: username, password: password })
-      .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
-          console.log("yes");
-          document.cookie = "username=" + username + "; ";
-          Cookies.setItem("id", res.data[0].user_id);
-          if (res.data[0].is_admin) {
-            Cookies.setItem("role", "admin");
-          } else {
-            Cookies.setItem("role", "user");
-          }
-          navigate("/");
+    try{
+      const result = await axios.post(url, { username: username, password: password });
+      console.log(result.data[0]);
+        document.cookie = "username=" + username + "; ";
+        Cookies.setItem("id", result.data[0].user_id);
+        if (result.data[0].is_admin) {
+          Cookies.setItem("role", "admin");
+        } else {
+          Cookies.setItem("role", "user");
         }
-      })
-      .catch((err) => {
-        console.log(err);
-        setErr(err.response.data.message);
-      });
+      navigate("/");
+    }
+    catch(err){
+      console.log(err);
+      setErr(err.response.data.message)
+    }
   };
 
   return (
