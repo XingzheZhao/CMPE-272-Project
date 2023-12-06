@@ -5,7 +5,7 @@ import axios from "axios";
 import Cookies from "js-cookies";
 
 const Login = () => {
-  const url = "http://localhost:3001/accounts/login";
+  const url = "https://cmpe-272-project.onrender.com/accounts/login";
 
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();

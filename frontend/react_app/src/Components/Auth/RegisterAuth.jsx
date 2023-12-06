@@ -27,7 +27,7 @@ const RegisterAuth = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            const url = "http://localhost:3001/accounts/register/auth"
+            const url = "https://cmpe-272-project.onrender.com/accounts/register/auth"
             await axios.post(url, {data: user, code: data.code, hashed_code: hashed_code});
             navigate('/login');
         }
@@ -44,7 +44,7 @@ const RegisterAuth = () => {
     const handleResend = async (e) => {
         e.preventDefault();
         try{
-            const url = "http://localhost:3001/accounts/send-email"
+            const url = "https://cmpe-272-project.onrender.com/accounts/send-email"
             const {data: res} = await axios.post(url, {email: user.email});
             setHashedCode(res.code);
             setResent(res.message)

@@ -15,7 +15,7 @@ const Profile = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/accounts/profile`,
+        `https://cmpe-272-project.onrender.com/accounts/profile`,
         { withCredentials: true }
       );
 

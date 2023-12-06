@@ -53,7 +53,7 @@ const ResetPassword = () => {
         e.preventDefault();
         try{
             if (state.hasLower && state.hasNumber && state.hasSpecial && state.hasUpper && state.minLength){
-                const url = "http://localhost:3001/accounts/reset-password"
+                const url = "https://cmpe-272-project.onrender.com/accounts/reset-password"
                 await axios.post(url, data)
                 navigate("/")
             }

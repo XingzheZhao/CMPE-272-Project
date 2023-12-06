@@ -7,7 +7,7 @@ import './Report.css'
 const Report = ()=> {
     const navigate = useNavigate();
 
-    const url = "http://localhost:3001/records/report"
+    const url = "https://cmpe-272-project.onrender.com/records/report"
 
     const {id} = useParams();
     const [reason, setReason] = useState();

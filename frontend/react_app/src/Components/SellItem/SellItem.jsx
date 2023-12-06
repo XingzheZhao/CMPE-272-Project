@@ -101,10 +101,10 @@ const SellItem = () => {
                 formData.append('exchange_demand', data.exchange_demand);
 
                 if(data.item_image === null){
-                    await axios.post("http://localhost:3001/items/item/create-null-image", formData);
+                    await axios.post("https://cmpe-272-project.onrender.com/items/item/create-null-image", formData);
                 }
                 else{
-                    await axios.post("http://localhost:3001/items/item/create", formData, {
+                    await axios.post("https://cmpe-272-project.onrender.com/items/item/create", formData, {
                         headers: {
                             'Content-Type': 'multipart/formData',
                         },

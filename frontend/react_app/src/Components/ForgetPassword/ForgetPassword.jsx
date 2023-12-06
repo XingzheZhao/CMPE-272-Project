@@ -25,7 +25,7 @@ const ForgetPassword = () => {
         setIsLoading(true);
 
         try{
-            const url = "http://localhost:3001/accounts/forget-password";
+            const url = "https://cmpe-272-project.onrender.com/accounts/forget-password";
             const {data: res} = await axios.post(url, data);
     
             const hased = SHA256(res.data + res.code);

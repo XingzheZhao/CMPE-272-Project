@@ -46,7 +46,7 @@ const Homepage = () => {
         }
         const fetchOnSaleItems = async () => {
             try{
-                const result = await axios.get("http://localhost:3001/items/on-sale-items");
+                const result = await axios.get("https://cmpe-272-project.onrender.com/items/on-sale-items");
                 setOnSaleItems(result.data);
             }
             catch(err){
@@ -55,7 +55,7 @@ const Homepage = () => {
         };
         const fetchInProgressItems = async () => {
             try{
-                const result = await axios.get("http://localhost:3001/items/in-progress-items", {params: {user: Cookies.get("id")}})
+                const result = await axios.get("https://cmpe-272-project.onrender.com/items/in-progress-items", {params: {user: Cookies.get("id")}})
                 setInProgressItems(result.data)
             }
             catch(err) {

@@ -73,7 +73,7 @@ const Register = () => {
     }
     try {
       if (state.hasLower && state.hasNumber && state.hasSpecial && state.hasUpper && state.minLength && data.userPassword === data.confirmed_password){
-        const url = "http://localhost:3001/accounts/register";
+        const url = "https://cmpe-272-project.onrender.com/accounts/register";
         const {data: res} = await axios.post(url, data);
         console.log(res.code);
         const hashed = SHA256(res.code);

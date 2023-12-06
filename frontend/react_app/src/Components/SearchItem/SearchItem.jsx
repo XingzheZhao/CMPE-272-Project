@@ -47,7 +47,7 @@ const SearchItem = () => {
         const searchText = text.replace("search=","");
         const fetchOnSaleItems = async () => {
             try{
-                const result = await axios.get("http://localhost:3001/items/search-on-sale", {params: {search: searchText}});
+                const result = await axios.get("https://cmpe-272-project.onrender.com/items/search-on-sale", {params: {search: searchText}});
                 setOnSaleItems(result.data);
             }
             catch(err){
@@ -56,7 +56,7 @@ const SearchItem = () => {
         };
         const fetchInProgressItems = async () => {
             try{
-                const result = await axios.get("http://localhost:3001/items/search-in-progress", {params: {search: searchText, buyer: 1}})
+                const result = await axios.get("https://cmpe-272-project.onrender.com/items/search-in-progress", {params: {search: searchText, buyer: 1}})
                 setInProgressItems(result.data)
             }
             catch(err) {

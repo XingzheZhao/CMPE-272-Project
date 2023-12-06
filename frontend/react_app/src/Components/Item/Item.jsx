@@ -18,7 +18,7 @@ const Item = () => {
             return navigate("/login");
         }
         const fetchItem = async () => {
-            const result = await axios.get("http://localhost:3001/items/item", {params: {id: id}});
+            const result = await axios.get("https://cmpe-272-project.onrender.com/items/item", {params: {id: id}});
             const data = result.data[0];
             setItem(data)
         }
@@ -44,7 +44,7 @@ const Item = () => {
 
     const DeleteItem = async () => {
         try{
-            await axios.delete("http://localhost:3001/items/item", {
+            await axios.delete("https://cmpe-272-project.onrender.com/items/item", {
                 params: {id: id}
             })
             navigate("/");
@@ -56,7 +56,7 @@ const Item = () => {
 
     const handleInterested = async () => {
         try{
-            await axios.post("http://localhost:3001/items/interested-item",
+            await axios.post("https://cmpe-272-project.onrender.com/items/interested-item",
             {seller: item.username, seller_email: item.email, buyer: Cookies.get("username"), item: item.item_name, id: Cookies.get("id"), item_id: id});
             navigate("/");
         }
@@ -74,7 +74,7 @@ const Item = () => {
         try{
             const resp = window.confirm("Are you sure your are not interested?")
             if(resp){
-                await axios.post("http://localhost:3001/items/not-interest", {item_id: id});
+                await axios.post("https://cmpe-272-project.onrender.com/items/not-interest", {item_id: id});
                 navigate("/");
             }
         }
@@ -87,7 +87,7 @@ const Item = () => {
         try{
             const resp = window.confirm("Warning: Once transcation is complete, you cannot undo this process!")
             if(resp){
-                await axios.post("http://localhost:3001/items/transcation-complete", {item_id: id})
+                await axios.post("https://cmpe-272-project.onrender.com/items/transcation-complete", {item_id: id})
                 navigate("/");
             }
         }
@@ -100,7 +100,7 @@ const Item = () => {
         try{
             const resp = window.confirm("Are you sure you don't want to sell this item to this buyer?")
             if(resp){
-                await axios.post("http://localhost:3001/items/not-interest", {item_id: id});
+                await axios.post("https://cmpe-272-project.onrender.com/items/not-interest", {item_id: id});
                 navigate("/");
             }
         }

@@ -22,7 +22,7 @@ const EditItem = () => {
             return navigate("/login");
         }
         const fetchItem = async () => {
-            const result = await axios.get("http://localhost:3001/items/item", {params: {id: id}});
+            const result = await axios.get("https://cmpe-272-project.onrender.com/items/item", {params: {id: id}});
             setItem(result.data[0]);
             setCharLimit(1000 - result.data[0].item_description.length);
         }
@@ -101,17 +101,17 @@ const EditItem = () => {
                 formData.append('exchange_demand', item.exchange_demand);
       
                 if(imageFromSQL){
-                  await axios.post("http://localhost:3001/items/item/edit-no-image", formData);
+                  await axios.post("https://cmpe-272-project.onrender.com/items/item/edit-no-image", formData);
                 }
                 else if(item.item_image !== null){
-                  await axios.post("http://localhost:3001/items/item/edit", formData, {
+                  await axios.post("https://cmpe-272-project.onrender.com/items/item/edit", formData, {
                       headers: {
                           'Content-Type': 'multipart/formData',
                       },
                   });
                 }
                 else{
-                  await axios.post("http://localhost:3001/items/item/edit-null-image", formData);
+                  await axios.post("https://cmpe-272-project.onrender.com/items/item/edit-null-image", formData);
                 }
                 navigate(`/item/${status}/${id}`);
             }

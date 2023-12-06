@@ -32,7 +32,7 @@ const Admin = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/accounts/admin", {
+      const response = await axios.get("https://cmpe-272-project.onrender.com/accounts/admin", {
         withCredentials: true,
       });
 
@@ -49,7 +49,7 @@ const Admin = () => {
   const fetchUserData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3001/accounts/admin/view-users",
+        "https://cmpe-272-project.onrender.com/accounts/admin/view-users",
         { withCredentials: true }
       );
       const allUsers = response.data.users;
@@ -63,7 +63,7 @@ const Admin = () => {
   const handleMarkAsSolved = async (reportId) => {
     try {
       await axios.put(
-        `http://localhost:3001/accounts/reports/${reportId}/solve`,
+        `https://cmpe-272-project.onrender.com/accounts/reports/${reportId}/solve`,
         null,
         {
           withCredentials: true,
@@ -78,7 +78,7 @@ const Admin = () => {
   const handleRemoveUser = async (userId) => {
     try {
       await axios.delete(
-        `http://localhost:3001/accounts/admin/user/${userId}`,
+        `https://cmpe-272-project.onrender.com/accounts/admin/user/${userId}`,
         { withCredentials: true }
       );
       fetchUserData();

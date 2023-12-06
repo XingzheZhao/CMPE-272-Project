@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { Navigate, useNavigate, useLocation } from "react-router-dom";
 import { TextField, Button } from "@mui/material";
 import axios from "axios";
+import Cookies from "js-cookie"
 
 import "./Auth.css"
 
@@ -23,10 +24,16 @@ const Auth = () => {
                 [e.target.name]: e.target.value});
     }
 
+    useEffect(() => {
+        if(Cookies.get("username") || Cookies.get("id")){
+            navigate("/");
+        }
+    })
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try{
-            const url = "http://localhost:3001/accounts/auth"
+            const url = "https://cmpe-272-project.onrender.com/accounts/auth"
             await axios.post(url, {code: data.code, hashed_code: hashed_code});
             navigate('/reset-password', {state: {email: location.state.user}})
         }
@@ -43,7 +50,7 @@ const Auth = () => {
     const handleResend = async (e) => {
         e.preventDefault();
         try{
-            const url = "http://localhost:3001/accounts/send-email"
+            const url = "https://cmpe-272-project.onrender.com/accounts/send-email"
             const {data: res} = await axios.post(url, {email: email});
             setHashedCode(res.code);
             setResent(res.message)
