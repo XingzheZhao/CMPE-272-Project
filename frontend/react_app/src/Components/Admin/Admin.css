@@ -1,56 +1,41 @@
-.admin {
+/* admin.css */
+.user-profile {
   display: flex;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding-top: 40px;
-  padding-right: 325px;
-  padding-left: 20px;
+  margin: 20px;
 }
 
 .tab {
-  display: flex;
-  flex-direction: column;
-  margin-right: 20px;
-}
-
-.tab div {
+  padding: 15px;
   cursor: pointer;
-  padding: 12px;
+  border-right: 3px solid transparent;
+  transition: border-right 0.3s ease-in-out, background-color 0.3s ease-in-out;
   margin-bottom: 10px;
-  background-color: rgb(248, 229, 107);
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  text-align: center;
-  width: 150px;
+  background-color: #f7ca18; /* Light yellow background for tabs */
+  color: #000; /* Black text color for tabs */
+  border-radius: 5px; /* Rounded corners for tabs */
 }
 
-.tab div.active {
-  background-color: rgb(15, 115, 228);
-  color: white;
+.tab.active {
+  border-right: 3px solid #3498db;
+  background-color: #d8dcde; /* Darker yellow background for the active tab */
+  color: #007bff; /* Blue text color for the active tab */
+  font-weight: bold; /* Added font-weight for better visibility */
 }
 
 .tab-content {
   flex: 1;
-  margin-left: 20px; /* Adjust the distance from the tab */
+  padding: 20px;
 }
 
 .table-view {
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 5px;
-  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
-.table-view div {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
+/* Styling for the tables */
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 th,
@@ -58,22 +43,79 @@ td {
   border: 1px solid #ddd;
   padding: 15px;
   text-align: left;
+}
+
+/* Styling for the item tabs */
+.table-view h2 {
+  color: #3498db;
+  margin-bottom: 15px;
+}
+
+/* Styling for the item description */
+td {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-th {
-  background-color: #f2f2f2;
-}
-
 /* Media query for responsiveness */
 @media screen and (max-width: 768px) {
-  .admin {
+  .user-profile {
     flex-direction: column;
   }
 
   .tab {
     margin-right: 0;
   }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirmation-modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.confirmation-modal p {
+  margin-bottom: 20px;
+}
+
+.confirmation-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.confirmation-buttons button {
+  margin: 0 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.confirmation-buttons .confirm {
+  background-color: #27ae60; /* Green color for Confirm button */
+  color: #fff;
+}
+
+.confirmation-buttons .cancel {
+  background-color: #c0392b; /* Red color for Cancel button */
+  color: #fff;
+}
+
+.confirmation-buttons button:hover {
+  opacity: 0.8;
 }

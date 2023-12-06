@@ -194,7 +194,7 @@ const Item = () => {
                                     variant="contained"
                                     size="large"
                                     onClick={handleInterested}>
-                                    I am interested on this item
+                                    I am interested in this item
                                 </Button> :
                                 <p>Seller cannot be interested on their own item</p>
                                 

@@ -1,58 +1,33 @@
+/* Profile.css */
 .user-profile {
   display: flex;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding-top: 40px;
-  padding-right: 250px;
-  padding-left: 20px;
+  margin: 20px;
 }
 
 .tab {
-  display: flex;
-  flex-direction: column;
-  margin-right: 20px;
-}
-
-.tab div {
+  padding: 15px;
   cursor: pointer;
-  padding: 12px;
+  border-right: 3px solid transparent;
+  transition: border-right 0.3s ease-in-out, background-color 0.3s ease-in-out;
   margin-bottom: 10px;
-  background-color: rgb(248, 229, 107);
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  text-align: center;
-  width: 150px;
+  background-color: #f7ca18; /* Light yellow background for tabs */
+  color: #000; /* Black text color for tabs */
+  border-radius: 5px; /* Rounded corners for tabs */
 }
 
-.tab div.active {
-  background-color: rgb(15, 115, 228);
-  color: white;
+.tab.active {
+  border-right: 3px solid #3498db;
+  background-color: #d8dcde; /* Darker yellow background for the active tab */
+  color: #007bff; /* Blue text color for the active tab */
+  font-weight: bold; /* Added font-weight for better visibility */
 }
 
 .tab-content {
   flex: 1;
-  margin-left: 20px; /* Adjust the distance from the tab */
-}
-
-.profile-info {
-  border: 1px solid #ddd;
   padding: 20px;
-  border-radius: 5px;
-  margin-bottom: 20px;
 }
 
-.profile-info div {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.selling-items,
-.buying-items,
-.history {
-  margin-top: 20px;
-}
-
+/* Additional styling for the tables */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -62,18 +37,37 @@ table {
 th,
 td {
   border: 1px solid #ddd;
-  padding: 15px;
+  padding: 12px;
   text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-th {
-  background-color: #f2f2f2;
+.profile-info {
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f8f8f8;
 }
 
-/* Media query for responsiveness */
+.profile-info h2 {
+  color: #3498db;
+  margin-bottom: 15px;
+}
+
+.profile-info div {
+  margin-bottom: 10px;
+}
+
+.profile-info strong {
+  margin-right: 10px;
+}
+
+.selling-items,
+.buying-items,
+.history {
+  margin-top: 20px;
+}
+
 @media screen and (max-width: 768px) {
   .user-profile {
     flex-direction: column;
@@ -81,5 +75,48 @@ th {
 
   .tab {
     margin-right: 0;
+    border-right: none;
+    border-bottom: 3px solid transparent;
   }
+
+  .tab.active {
+    border-bottom: 3px solid #3498db;
+  }
+}
+
+/* Styling for the item tables */
+.selling-items table,
+.buying-items table,
+.history table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.selling-items th,
+.buying-items th,
+.history th,
+.selling-items td,
+.buying-items td,
+.history td {
+  border: 1px solid #ddd;
+  padding: 15px;
+  text-align: left;
+}
+
+/* Styling for the item tabs */
+.selling-items h2,
+.buying-items h2,
+.history h2 {
+  color: #3498db;
+  margin-bottom: 15px;
+}
+
+/* Styling for the item description */
+.selling-items td,
+.buying-items td,
+.history td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
