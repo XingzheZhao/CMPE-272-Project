@@ -352,12 +352,13 @@ router.get("/profile", async (req, res, next) => {
   }
 });
 
+// ! admin section
+// ! admin view
 router.get("/admin", async (req, res, next) => {
   try {
     const username = req.cookies.username;
     const userId = req.cookies.id;
     const role = req.cookies.role;
-
     // check cookie for admin
     if (!username || role !== "admin") {
       return res.status(401).json({ message: "Admin Not Authenticated!" });
@@ -370,13 +371,69 @@ router.get("/admin", async (req, res, next) => {
 
     // get reports
     const [reports] = await db.query(
-      "SELECT initiator.username AS initiator_username, r.report_reason, r.report_description, r.item_id, i.item_name, r.is_solved FROM Report r INNER JOIN Users initiator ON r.initiator_id=initiator.user_id LEFT JOIN Item i ON r.item_id=i.item_id;"
+      "SELECT initiator.username AS initiator_username, r.report_reason, r.report_description, r.item_id, i.item_name, r.is_solved, r.report_id FROM Report r INNER JOIN Users initiator ON r.initiator_id=initiator.user_id LEFT JOIN Item i ON r.item_id=i.item_id WHERE r.is_solved=0;"
     );
 
     res.status(200).json({ completedSell: completedSell, report: reports });
   } catch (error) {
     console.log(error);
     next(error);
+  }
+});
+
+// ! admin cookie check
+const authenticateAdmin = (req, res, next) => {
+  const username = req.cookies.username;
+  const userId = req.cookies.id;
+  const role = req.cookies.role;
+  // check cookie for admin
+  if (!username || role !== "admin") {
+    return res.status(401).json({ message: "Admin Not Authenticated!" });
+  } else {
+    return next();
+  }
+};
+
+// ! admin solve report
+router.put("/reports/:report_id/solve", authenticateAdmin, async (req, res) => {
+  const { report_id } = req.params;
+
+  try {
+    const query = "UPDATE Report SET is_solved=1 WHERE report_id=?;";
+    await db.query(query, [report_id]);
+
+    res.status(200).json({ message: "Report is marked as solved." });
+  } catch (error) {
+    console.error("Error updating report: ", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// ! admin view all users
+router.get("/admin/view-users", authenticateAdmin, async (req, res) => {
+  try {
+    const [users] = await db.query(
+      "SELECT user_id, username, f_name, l_name, email, phone_num FROM Users"
+    );
+
+    res.status(200).json({ users: users });
+  } catch (error) {
+    console.log("Error retrieving user data: ", error);
+    res.status;
+  }
+});
+
+// ! admin remove user
+router.delete("/admin/user/:userId", authenticateAdmin, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const query = "DELETE FROM Users WHERE user_id=?;";
+    await db.query(query, [userId]);
+    res.status(200).json({ message: "User has been removed!" });
+  } catch (error) {
+    console.error("Error removing user: ", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
