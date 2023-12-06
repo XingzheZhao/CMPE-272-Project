@@ -15,7 +15,16 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      const result = await axios.post(url, { username: username, password: password });
+      const result = await axios.post(
+        url,
+        { username: username, password: password },
+        {
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
       console.log(result.data[0]);
         document.cookie = "username=" + username + "; ";
         Cookies.setItem("id", result.data[0].user_id);
