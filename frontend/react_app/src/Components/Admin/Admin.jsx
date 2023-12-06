@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Admin.css";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
 const Admin = () => {
@@ -17,13 +17,26 @@ const Admin = () => {
 
       const recentBuyingSelling = response.data.completedSell;
       const userReports = response.data.report;
-      console.log(recentBuyingSelling);
-      console.log(userReports);
 
       setCompletedSell(recentBuyingSelling);
       setReports(userReports);
     } catch (error) {
       console.log(error.response);
+    }
+  };
+
+  const handleMarkAsSolved = async (reportId) => {
+    try {
+      await axios.put(
+        `http://localhost:3001/accounts/reports/${reportId}/solve`,
+        null,
+        {
+          withCredentials: true,
+        }
+      );
+      fetchData();
+    } catch (error) {
+      console.error("Error marking report as solved: ", error);
     }
   };
 
@@ -73,6 +86,7 @@ const Admin = () => {
             <th>Item ID</th>
             <th>Item Name</th>
             <th>Is the Problem solved?</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -81,9 +95,18 @@ const Admin = () => {
               <td>{row.initiator_username}</td>
               <td>{row.report_reason}</td>
               <td>{row.report_description}</td>
-              <td>{row.item_id}</td>
+              <td>
+                <Link to={`/item/progress/${row.item_id}`}>{row.item_id}</Link>
+              </td>
               <td>{row.item_name}</td>
               <td>{row.is_solved === 1 ? "Yes" : "No"}</td>
+              <td>
+                {!row.is_solved && (
+                  <button onClick={() => handleMarkAsSolved(row.report_id)}>
+                    Solved
+                  </button>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
