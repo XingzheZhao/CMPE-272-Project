@@ -144,7 +144,7 @@ const Admin = () => {
               <td>{row.report_reason}</td>
               <td>{row.report_description}</td>
               <td>
-                <Link to={`/item/progress/${row.item_id}`}>{row.item_id}</Link>
+                <Link to={`/item/admin/${row.item_id}`}>{row.item_id}</Link>
               </td>
               <td>{row.item_name}</td>
               <td>{row.is_solved === 1 ? "Yes" : "No"}</td>
